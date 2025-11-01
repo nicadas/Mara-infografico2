@@ -286,98 +286,92 @@
   </div>
 
   <script>
-    // Parâmetros iniciais
-    let currentCurve = 'parabola';
-    let currentView = '3d';
-    let currentRender = 'surface';
+    let curvaAtual = 'parabola';
+    let visualizacaoAtual = '3d';
+    let renderizacaoAtual = 'surface';
     
-    // Configuração inicial
-    initPlot();
+    inicializarPlot();
     
-    // Função para inicializar o gráfico
-    function initPlot() {
-      updatePlot();
+    function inicializarPlot() {
+      atualizarPlot();
       
-      // Adiciona event listeners aos botões de curva
-      document.querySelectorAll('.curve-btn').forEach(btn => {
-        btn.addEventListener('click', function() {
+      document.querySelectorAll('.curve-btn').forEach(botao => {
+        botao.addEventListener('click', function() {
           document.querySelectorAll('.curve-btn').forEach(b => b.classList.remove('active'));
           this.classList.add('active');
-          currentCurve = this.getAttribute('data-curve');
-          updateInterface();
+          curvaAtual = this.getAttribute('data-curve');
+          atualizarInterface();
         });
       });
       
-      // Adiciona event listeners aos botões de visualização
-      document.querySelectorAll('.view-btn').forEach(btn => {
-        btn.addEventListener('click', function() {
+      document.querySelectorAll('.view-btn').forEach(botao => {
+        botao.addEventListener('click', function() {
           document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
           this.classList.add('active');
-          currentView = this.getAttribute('data-view');
-          updateRenderToggle();
-          updatePlot();
+          visualizacaoAtual = this.getAttribute('data-view');
+          atualizarRenderToggle();
+          atualizarPlot();
         });
       });
       
-      // Adiciona event listeners aos botões de renderização
-      document.querySelectorAll('.render-btn').forEach(btn => {
-        btn.addEventListener('click', function() {
+      document.querySelectorAll('.render-btn').forEach(botao => {
+        botao.addEventListener('click', function() {
           document.querySelectorAll('.render-btn').forEach(b => b.classList.remove('active'));
           this.classList.add('active');
-          currentRender = this.getAttribute('data-render');
-          updatePlot();
+          renderizacaoAtual = this.getAttribute('data-render');
+          atualizarPlot();
         });
       });
       
-      document.getElementById('update-plot').addEventListener('click', updatePlot);
+      document.getElementById('update-plot').addEventListener('click', atualizarPlot);
       
       document.querySelectorAll('.param-input').forEach(input => {
-        input.addEventListener('input', updateEquationDisplay);
+        input.addEventListener('input', atualizarEquacaoDisplay);
       });
       
-      updateInterface();
+      atualizarInterface();
     }
     
-    function updateRenderToggle() {
+    function atualizarRenderToggle() {
       const renderToggle = document.getElementById('render-toggle');
-      if (currentView === '3d') {
+      if (visualizacaoAtual === '3d') {
         renderToggle.style.display = 'flex';
       } else {
         renderToggle.style.display = 'none';
       }
     }
     
-    function updateInterface() {
-      document.querySelectorAll('.curve-params').forEach(panel => {
-        panel.style.display = 'none';
+    function atualizarInterface() {
+      document.querySelectorAll('.curve-params').forEach(painel => {
+        painel.style.display = 'none';
       });
       
-      document.getElementById(`${currentCurve}-params`).style.display = 'block';
-      updateDescription();
-      updateEquationDisplay();
-      updateRenderToggle();
+      document.getElementById(`${curvaAtual}-params`).style.display = 'block';
+      atualizarDescricao();
+      atualizarEquacaoDisplay();
+      atualizarRenderToggle();
     }
     
-    function updateDescription() {
-      const description = document.getElementById('curve-description');
+    function atualizarDescricao() {
+      const descricao = document.getElementById('curve-description');
       
-      switch(currentCurve) {
+      switch(curvaAtual) {
         case 'parabola':
-          description.textContent = "Uma parábola é o conjunto de pontos equidistantes de um foco e uma diretriz.";
+          descricao.textContent = "Uma parábola é o conjunto de pontos equidistantes de um foco e uma diretriz.";
           break;
         case 'hiperbole':
-          description.textContent = "Uma hipérbole é o conjunto de pontos onde a diferença das distâncias a dois focos é constante.";
+          descricao.textContent = "Uma hipérbole é o conjunto de pontos onde a diferença das distâncias a dois focos é constante.";
           break;
         case 'elipse':
-          description.textContent = "Uma elipse é o conjunto de pontos onde a soma das distâncias a dois focos é constante.";
+          descricao.textContent = "Uma elipse é o conjunto de pontos onde a soma das distâncias a dois focos é constante.";
           break;
       }
     }
     
-    function updateEquationDisplay() {
+    function atualizarEquacaoDisplay() {
       let a, b;
       
-      switch(currentCurve) {
+      switch(curvaAtual) {
         case 'parabola':
           a = document.getElementById('parabola-a').value;
           document.getElementById('parabola-equation').innerHTML = 
@@ -398,27 +392,27 @@
       }
     }
     
-    function updatePlot() {
-      if (currentView === '3d') {
-        create3DPlot();
+    function atualizarPlot() {
+      if (visualizacaoAtual === '3d') {
+        criarPlot3D();
       } else {
-        create2DPlot();
+        criarPlot2D();
       }
     }
     
-    function create3DPlot() {
+    function criarPlot3D() {
       let x = [], y = [];
-      const step = currentRender === 'surface' ? 0.15 : 0.3;
+      const passo = renderizacaoAtual === 'surface' ? 0.15 : 0.3;
       
       let a, b;
       
-      switch(currentCurve) {
+      switch(curvaAtual) {
         case 'parabola':
           a = parseFloat(document.getElementById('parabola-a').value);
-          for (let i = -4; i <= 4; i += step) {
+          for (let i = -4; i <= 4; i += passo) {
             x.push(i);
           }
-          for (let j = -4; j <= 4; j += step) {
+          for (let j = -4; j <= 4; j += passo) {
             y.push(j);
           }
           
@@ -431,17 +425,17 @@
             z_parabola.push(linha);
           }
           
-          create3DSurface(x, y, z_parabola, 'Viridis');
+          criarSuperficie3D(x, y, z_parabola, 'Viridis');
           break;
           
         case 'hiperbole':
           a = parseFloat(document.getElementById('hiperbole-a').value);
           b = parseFloat(document.getElementById('hiperbole-b').value);
           
-          for (let i = -3; i <= 3; i += step) {
+          for (let i = -3; i <= 3; i += passo) {
             x.push(i);
           }
-          for (let j = -3; j <= 3; j += step) {
+          for (let j = -3; j <= 3; j += passo) {
             y.push(j);
           }
           
@@ -467,7 +461,7 @@
             z_hiperbole_neg.push(linha_neg);
           }
           
-          create3DHyperboleSurface(x, y, z_hiperbole_pos, z_hiperbole_neg, 'Hot');
+          criarSuperficieHiperbole3D(x, y, z_hiperbole_pos, z_hiperbole_neg, 'Hot');
           break;
           
         case 'elipse':
@@ -475,10 +469,10 @@
           b = parseFloat(document.getElementById('elipse-b').value);
           
           const theta = [], phi = [];
-          for (let t = 0; t <= Math.PI; t += step) {
+          for (let t = 0; t <= Math.PI; t += passo) {
             theta.push(t);
           }
-          for (let p = 0; p <= 2 * Math.PI; p += step) {
+          for (let p = 0; p <= 2 * Math.PI; p += passo) {
             phi.push(p);
           }
           
@@ -497,21 +491,21 @@
             z_elipse.push(linha_z);
           }
           
-          create3DEllipsoidSurface(x_elipse, y_elipse, z_elipse, 'Electric');
+          criarSuperficieElipsoide3D(x_elipse, y_elipse, z_elipse, 'Electric');
           break;
       }
     }
     
-    function create3DSurface(x, y, z, colorscale) {
+    function criarSuperficie3D(x, y, z, escalaCores) {
       let superficie;
       
-      if (currentRender === 'surface') {
+      if (renderizacaoAtual === 'surface') {
         superficie = {
           x: x,
           y: y, 
           z: z,
           type: 'surface',
-          colorscale: colorscale,
+          colorscale: escalaCores,
           opacity: 0.95,
           showscale: false,
           name: 'Superfície',
@@ -521,19 +515,19 @@
           }
         };
       } else {
-        const x_points = [], y_points = [], z_points = [];
+        const x_pontos = [], y_pontos = [], z_pontos = [];
         for (let i = 0; i < y.length; i++) {
           for (let j = 0; j < x.length; j++) {
-            x_points.push(x[j]);
-            y_points.push(y[i]);
-            z_points.push(z[i][j]);
+            x_pontos.push(x[j]);
+            y_pontos.push(y[i]);
+            z_pontos.push(z[i][j]);
           }
         }
         
         superficie = {
-          x: x_points,
-          y: y_points,
-          z: z_points,
+          x: x_pontos,
+          y: y_pontos,
+          z: z_pontos,
           mode: 'markers',
           type: 'scatter3d',
           marker: {
@@ -545,19 +539,19 @@
         };
       }
       
-      create3DAxes([superficie]);
+      criarEixos3D([superficie]);
     }
     
-    function create3DHyperboleSurface(x, y, z_pos, z_neg, colorscale) {
+    function criarSuperficieHiperbole3D(x, y, z_pos, z_neg, escalaCores) {
       let superficie_pos, superficie_neg;
       
-      if (currentRender === 'surface') {
+      if (renderizacaoAtual === 'surface') {
         superficie_pos = {
           x: x,
           y: y, 
           z: z_pos,
           type: 'surface',
-          colorscale: colorscale,
+          colorscale: escalaCores,
           opacity: 0.9,
           showscale: false,
           name: 'Superfície +Z'
@@ -568,32 +562,32 @@
           y: y, 
           z: z_neg,
           type: 'surface',
-          colorscale: colorscale,
+          colorscale: escalaCores,
           opacity: 0.9,
           showscale: false,
           name: 'Superfície -Z'
         };
         
-        create3DAxes([superficie_pos, superficie_neg]);
+        criarEixos3D([superficie_pos, superficie_neg]);
       } else {
-        const x_points = [], y_points = [], z_points = [];
+        const x_pontos = [], y_pontos = [], z_pontos = [];
         for (let i = 0; i < y.length; i++) {
           for (let j = 0; j < x.length; j++) {
             if (z_pos[i][j] !== 0) {
-              x_points.push(x[j]);
-              y_points.push(y[i]);
-              z_points.push(z_pos[i][j]);
-              x_points.push(x[j]);
-              y_points.push(y[i]);
-              z_points.push(z_neg[i][j]);
+              x_pontos.push(x[j]);
+              y_pontos.push(y[i]);
+              z_pontos.push(z_pos[i][j]);
+              x_pontos.push(x[j]);
+              y_pontos.push(y[i]);
+              z_pontos.push(z_neg[i][j]);
             }
           }
         }
         
         const pontos = {
-          x: x_points,
-          y: y_points,
-          z: z_points,
+          x: x_pontos,
+          y: y_pontos,
+          z: z_pontos,
           mode: 'markers',
           type: 'scatter3d',
           marker: {
@@ -604,20 +598,20 @@
           name: 'Pontos'
         };
         
-        create3DAxes([pontos]);
+        criarEixos3D([pontos]);
       }
     }
     
-    function create3DEllipsoidSurface(x, y, z, colorscale) {
+    function criarSuperficieElipsoide3D(x, y, z, escalaCores) {
       let superficie;
       
-      if (currentRender === 'surface') {
+      if (renderizacaoAtual === 'surface') {
         superficie = {
           x: x,
           y: y, 
           z: z,
           type: 'surface',
-          colorscale: colorscale,
+          colorscale: escalaCores,
           opacity: 0.95,
           showscale: false,
           name: 'Elipsoide',
@@ -627,19 +621,19 @@
           }
         };
       } else {
-        const x_points = [], y_points = [], z_points = [];
+        const x_pontos = [], y_pontos = [], z_pontos = [];
         for (let i = 0; i < y.length; i++) {
           for (let j = 0; j < x[i].length; j++) {
-            x_points.push(x[i][j]);
-            y_points.push(y[i][j]);
-            z_points.push(z[i][j]);
+            x_pontos.push(x[i][j]);
+            y_pontos.push(y[i][j]);
+            z_pontos.push(z[i][j]);
           }
         }
         
         superficie = {
-          x: x_points,
-          y: y_points,
-          z: z_points,
+          x: x_pontos,
+          y: y_pontos,
+          z: z_pontos,
           mode: 'markers',
           type: 'scatter3d',
           marker: {
@@ -651,20 +645,18 @@
         };
       }
       
-      create3DAxes([superficie]);
+      criarEixos3D([superficie]);
     }
     
-    function create3DAxes(superficies) {
+    function criarEixos3D(superficies) {
       let elementos = [...superficies];
       
-      // Adicionar elementos geométricos específicos para cada curva em 3D
       let a, b;
       
-      switch(currentCurve) {
+      switch(curvaAtual) {
         case 'parabola':
           a = parseFloat(document.getElementById('parabola-a').value);
           
-          // Foco da parábola em 3D
           elementos.push({
             x: [0], y: [0], z: [a],
             mode: 'markers',
@@ -677,20 +669,19 @@
             name: 'Foco'
           });
           
-          // Diretriz da parábola em 3D (plano)
-          const diretriz_points = [];
+          const pontos_diretriz = [];
           for (let i = -4; i <= 4; i += 0.5) {
             for (let j = -4; j <= 4; j += 0.5) {
-              diretriz_points.push({
+              pontos_diretriz.push({
                 x: i, y: j, z: -a
               });
             }
           }
           
           elementos.push({
-            x: diretriz_points.map(p => p.x),
-            y: diretriz_points.map(p => p.y),
-            z: diretriz_points.map(p => p.z),
+            x: pontos_diretriz.map(p => p.x),
+            y: pontos_diretriz.map(p => p.y),
+            z: pontos_diretriz.map(p => p.z),
             mode: 'markers',
             type: 'scatter3d',
             marker: {
@@ -707,7 +698,6 @@
           b = parseFloat(document.getElementById('hiperbole-b').value);
           const c_hiperbole = Math.sqrt(a*a + b*b);
           
-          // Focos da hipérbole em 3D
           elementos.push({
             x: [c_hiperbole, -c_hiperbole],
             y: [0, 0],
@@ -722,7 +712,6 @@
             name: 'Focos'
           });
           
-          // Centro da hipérbole em 3D
           elementos.push({
             x: [0], y: [0], z: [0],
             mode: 'markers',
@@ -741,7 +730,6 @@
           b = parseFloat(document.getElementById('elipse-b').value);
           const c_elipse = Math.sqrt(Math.abs(a*a - b*b));
           
-          // Focos da elipse em 3D
           elementos.push({
             x: [c_elipse, -c_elipse],
             y: [0, 0],
@@ -756,7 +744,6 @@
             name: 'Focos'
           });
           
-          // Centro da elipse em 3D
           elementos.push({
             x: [0], y: [0], z: [0],
             mode: 'markers',
@@ -771,7 +758,6 @@
           break;
       }
       
-      // Eixos coordenados
       const eixo_x = {
         x: [-6, 6], y: [0, 0], z: [0, 0],
         mode: 'lines', type: 'scatter3d',
@@ -845,17 +831,17 @@
       Plotly.newPlot('grafico', elementos, layout);
     }
     
-    function create2DPlot() {
-      const step = 0.05;
+    function criarPlot2D() {
+      const passo = 0.05;
       let x = [];
       let y = [];
       
       let a, b;
       
-      switch(currentCurve) {
+      switch(curvaAtual) {
         case 'parabola':
           a = parseFloat(document.getElementById('parabola-a').value);
-          for (let i = -6; i <= 6; i += step) {
+          for (let i = -6; i <= 6; i += passo) {
             x.push(i);
             y.push((i * i) / (4 * a));
           }
@@ -864,7 +850,7 @@
         case 'hiperbole':
           a = parseFloat(document.getElementById('hiperbole-a').value);
           b = parseFloat(document.getElementById('hiperbole-b').value);
-          for (let i = -6; i <= 6; i += step) {
+          for (let i = -6; i <= 6; i += passo) {
             if (Math.abs(i) >= a - 0.1) {
               x.push(i, i);
               const y_val = Math.sqrt((i * i) / (a * a) - 1) * b;
@@ -876,7 +862,7 @@
         case 'elipse':
           a = parseFloat(document.getElementById('elipse-a').value);
           b = parseFloat(document.getElementById('elipse-b').value);
-          for (let i = -a; i <= a; i += step) {
+          for (let i = -a; i <= a; i += passo) {
             x.push(i, i);
             const y_val = Math.sqrt(1 - (i * i) / (a * a)) * b;
             y.push(y_val, -y_val);
@@ -884,7 +870,7 @@
           break;
       }
       
-      const trace = {
+      const traco = {
         x: x,
         y: y,
         mode: 'lines',
@@ -894,13 +880,12 @@
           width: 3,
           shape: 'spline'
         },
-        name: currentCurve.charAt(0).toUpperCase() + currentCurve.slice(1),
+        name: curvaAtual.charAt(0).toUpperCase() + curvaAtual.slice(1),
         showlegend: false
       };
       
-      let elementos = [trace];
+      let elementos = [traco];
       
-      // Eixos coordenados
       const eixo_x = {
         x: [-8, 8], y: [0, 0],
         mode: 'lines',
@@ -921,10 +906,8 @@
       
       elementos.push(eixo_x, eixo_y);
       
-      // Elementos geométricos para TODAS as curvas em 2D
-      switch(currentCurve) {
+      switch(curvaAtual) {
         case 'parabola':
-          // Foco da parábola
           elementos.push({
             x: [0],
             y: [a],
@@ -939,7 +922,6 @@
             name: 'Foco'
           });
           
-          // Diretriz da parábola
           elementos.push({
             x: [-8, 8],
             y: [-a, -a],
@@ -957,7 +939,6 @@
         case 'hiperbole':
           const c_hiperbole = Math.sqrt(a*a + b*b);
           
-          // Focos da hipérbole
           elementos.push({
             x: [c_hiperbole, -c_hiperbole],
             y: [0, 0],
@@ -972,7 +953,6 @@
             name: 'Focos'
           });
           
-          // Centro da hipérbole
           elementos.push({
             x: [0],
             y: [0],
@@ -991,7 +971,6 @@
         case 'elipse':
           const c_elipse = Math.sqrt(Math.abs(a*a - b*b));
           
-          // Focos da elipse
           elementos.push({
             x: [c_elipse, -c_elipse],
             y: [0, 0],
@@ -1006,7 +985,6 @@
             name: 'Focos'
           });
           
-          // Centro da elipse
           elementos.push({
             x: [0],
             y: [0],
