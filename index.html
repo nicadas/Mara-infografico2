@@ -247,11 +247,11 @@
       <div id="elipse-params" class="curve-params" style="display:none">
         <div class="param-group">
           <label for="elipse-a">Semi-eixo a:</label>
-          <input type="number" id="elipse-a" class="param-input" value="2" step="0.1" min="0.1">
+          <input type="number" id="elipse-a" class="param-input" value="5" step="0.1" min="0.1">
         </div>
         <div class="param-group">
           <label for="elipse-b">Semi-eixo b:</label>
-          <input type="number" id="elipse-b" class="param-input" value="4" step="0.1" min="0.1">
+          <input type="number" id="elipse-b" class="param-input" value="3" step="0.1" min="0.1">
         </div>
         <div class="equation-display" id="elipse-equation">
           x²/a² + y²/b² = 1
@@ -833,59 +833,154 @@
     
     function criarPlot2D() {
       const passo = 0.05;
-      let x = [];
-      let y = [];
+      let elementos = [];
       
       let a, b;
       
       switch(curvaAtual) {
         case 'parabola':
           a = parseFloat(document.getElementById('parabola-a').value);
+          let x_parabola = [], y_parabola = [];
           for (let i = -6; i <= 6; i += passo) {
-            x.push(i);
-            y.push((i * i) / (4 * a));
+            x_parabola.push(i);
+            y_parabola.push((i * i) / (4 * a));
           }
+          
+          elementos.push({
+            x: x_parabola,
+            y: y_parabola,
+            mode: 'lines',
+            type: 'scatter',
+            line: { 
+              color: '#00ffff', 
+              width: 3,
+              shape: 'spline'
+            },
+            name: 'Parábola',
+            showlegend: false
+          });
           break;
           
         case 'hiperbole':
           a = parseFloat(document.getElementById('hiperbole-a').value);
           b = parseFloat(document.getElementById('hiperbole-b').value);
-          for (let i = -6; i <= 6; i += passo) {
-            if (Math.abs(i) >= a - 0.1) {
-              x.push(i, i);
-              const y_val = Math.sqrt((i * i) / (a * a) - 1) * b;
-              y.push(y_val, -y_val);
-            }
+          
+          // Ramo direito (superior)
+          let x_hiperbole_dir_sup = [], y_hiperbole_dir_sup = [];
+          for (let i = a; i <= 6; i += passo) {
+            const y_val = Math.sqrt((i * i) / (a * a) - 1) * b;
+            x_hiperbole_dir_sup.push(i);
+            y_hiperbole_dir_sup.push(y_val);
           }
+          
+          // Ramo direito (inferior)
+          let x_hiperbole_dir_inf = [], y_hiperbole_dir_inf = [];
+          for (let i = 6; i >= a; i -= passo) {
+            const y_val = -Math.sqrt((i * i) / (a * a) - 1) * b;
+            x_hiperbole_dir_inf.push(i);
+            y_hiperbole_dir_inf.push(y_val);
+          }
+          
+          // Ramo esquerdo (superior)
+          let x_hiperbole_esq_sup = [], y_hiperbole_esq_sup = [];
+          for (let i = -a; i >= -6; i -= passo) {
+            const y_val = Math.sqrt((i * i) / (a * a) - 1) * b;
+            x_hiperbole_esq_sup.push(i);
+            y_hiperbole_esq_sup.push(y_val);
+          }
+          
+          // Ramo esquerdo (inferior)
+          let x_hiperbole_esq_inf = [], y_hiperbole_esq_inf = [];
+          for (let i = -6; i <= -a; i += passo) {
+            const y_val = -Math.sqrt((i * i) / (a * a) - 1) * b;
+            x_hiperbole_esq_inf.push(i);
+            y_hiperbole_esq_inf.push(y_val);
+          }
+          
+          // Adicionar os 4 ramos separadamente (sem fechar)
+          elementos.push({
+            x: x_hiperbole_dir_sup,
+            y: y_hiperbole_dir_sup,
+            mode: 'lines',
+            type: 'scatter',
+            line: { 
+              color: '#00ffff', 
+              width: 3
+            },
+            name: 'Hipérbole - Ramo Direito Superior',
+            showlegend: false
+          });
+          
+          elementos.push({
+            x: x_hiperbole_dir_inf,
+            y: y_hiperbole_dir_inf,
+            mode: 'lines',
+            type: 'scatter',
+            line: { 
+              color: '#00ffff', 
+              width: 3
+            },
+            name: 'Hipérbole - Ramo Direito Inferior',
+            showlegend: false
+          });
+          
+          elementos.push({
+            x: x_hiperbole_esq_sup,
+            y: y_hiperbole_esq_sup,
+            mode: 'lines',
+            type: 'scatter',
+            line: { 
+              color: '#00ffff', 
+              width: 3
+            },
+            name: 'Hipérbole - Ramo Esquerdo Superior',
+            showlegend: false
+          });
+          
+          elementos.push({
+            x: x_hiperbole_esq_inf,
+            y: y_hiperbole_esq_inf,
+            mode: 'lines',
+            type: 'scatter',
+            line: { 
+              color: '#00ffff', 
+              width: 3
+            },
+            name: 'Hipérbole - Ramo Esquerdo Inferior',
+            showlegend: false
+          });
           break;
           
         case 'elipse':
           a = parseFloat(document.getElementById('elipse-a').value);
           b = parseFloat(document.getElementById('elipse-b').value);
-          for (let i = -a; i <= a; i += passo) {
-            x.push(i, i);
-            const y_val = Math.sqrt(1 - (i * i) / (a * a)) * b;
-            y.push(y_val, -y_val);
+          let x_elipse = [], y_elipse = [];
+          
+          // Elipse completa e fechada
+          for (let angulo = 0; angulo <= 2 * Math.PI; angulo += passo) {
+            x_elipse.push(a * Math.cos(angulo));
+            y_elipse.push(b * Math.sin(angulo));
           }
+          // Fechar a elipse
+          x_elipse.push(a * Math.cos(0));
+          y_elipse.push(b * Math.sin(0));
+          
+          elementos.push({
+            x: x_elipse,
+            y: y_elipse,
+            mode: 'lines',
+            type: 'scatter',
+            line: { 
+              color: '#00ffff', 
+              width: 3
+            },
+            name: 'Elipse',
+            showlegend: false
+          });
           break;
       }
       
-      const traco = {
-        x: x,
-        y: y,
-        mode: 'lines',
-        type: 'scatter',
-        line: { 
-          color: '#00ffff', 
-          width: 3,
-          shape: 'spline'
-        },
-        name: curvaAtual.charAt(0).toUpperCase() + curvaAtual.slice(1),
-        showlegend: false
-      };
-      
-      let elementos = [traco];
-      
+      // Adicionar eixos
       const eixo_x = {
         x: [-8, 8], y: [0, 0],
         mode: 'lines',
@@ -906,6 +1001,7 @@
       
       elementos.push(eixo_x, eixo_y);
       
+      // Adicionar elementos específicos de cada curva
       switch(curvaAtual) {
         case 'parabola':
           elementos.push({
@@ -1031,8 +1127,7 @@
           font: { color: 'white' },
           x: 0.02,
           y: 0.98
-        },
-        plot_bgcolor: 'rgba(0,0,0,0.1)'
+        }
       };
       
       Plotly.newPlot('grafico', elementos, layout);
