@@ -1,1137 +1,1870 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <title>Superfícies Cônicas 3D — Parábola, Hipérbole e Elipse</title>
-  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-  <style>
-    body {
-      background: radial-gradient(circle at top, #0a0a0a, #000);
-      color: white;
-      font-family: "Poppins", sans-serif;
-      margin: 0;
-      padding: 0;
-    }
-    h1 {
-      font-size: 22px;
-      margin-top: 15px;
-      color: #00ffff;
-      text-align: center;
-    }
-    #grafico {
-      width: 100%;
-      height: 75vh;
-      border-radius: 12px;
-      box-shadow: 0 0 20px #00ffff55;
-    }
-    .container {
-      display: flex;
-      max-width: 1400px;
-      margin: 0 auto;
-      padding: 20px;
-      gap: 20px;
-    }
-    .controls-panel {
-      width: 320px;
-      background: rgba(0, 255, 255, 0.05);
-      border-radius: 10px;
-      padding: 20px;
-      border: 1px solid #00ffff33;
-      flex-shrink: 0;
-    }
-    .graphic-area {
-      flex: 1;
-      min-width: 0;
-    }
-    .curve-btn {
-      background: rgba(0, 255, 255, 0.1);
-      color: #00ffff;
-      border: 1px solid #00ffff;
-      border-radius: 20px;
-      padding: 10px 20px;
-      font-family: "Poppins", sans-serif;
-      cursor: pointer;
-      transition: all 0.3s;
-      width: 100%;
-      margin-bottom: 10px;
-    }
-    .curve-btn:hover {
-      background: rgba(0, 255, 255, 0.2);
-      transform: translateY(-2px);
-    }
-    .curve-btn.active {
-      background: #00ffff;
-      color: #000;
-      box-shadow: 0 0 15px #00ffff;
-    }
-    .view-toggle {
-      display: flex;
-      gap: 10px;
-      margin-bottom: 15px;
-    }
-    .view-btn {
-      flex: 1;
-      background: rgba(0, 255, 255, 0.1);
-      color: #00ffff;
-      border: 1px solid #00ffff;
-      border-radius: 20px;
-      padding: 8px 15px;
-      font-family: "Poppins", sans-serif;
-      cursor: pointer;
-      transition: all 0.3s;
-      font-size: 14px;
-    }
-    .view-btn:hover {
-      background: rgba(0, 255, 255, 0.2);
-    }
-    .view-btn.active {
-      background: #00ffff;
-      color: #000;
-      box-shadow: 0 0 10px #00ffff;
-    }
-    .render-toggle {
-      display: flex;
-      gap: 10px;
-      margin-bottom: 15px;
-    }
-    .render-btn {
-      flex: 1;
-      background: rgba(0, 255, 255, 0.1);
-      color: #00ffff;
-      border: 1px solid #00ffff;
-      border-radius: 20px;
-      padding: 8px 15px;
-      font-family: "Poppins", sans-serif;
-      cursor: pointer;
-      transition: all 0.3s;
-      font-size: 14px;
-    }
-    .render-btn:hover {
-      background: rgba(0, 255, 255, 0.2);
-    }
-    .render-btn.active {
-      background: #00ffff;
-      color: #000;
-      box-shadow: 0 0 10px #00ffff;
-    }
-    .param-group {
-      margin: 15px 0;
-    }
-    .param-group label {
-      display: block;
-      margin-bottom: 5px;
-      color: #00ffff;
-      font-size: 14px;
-    }
-    .param-input {
-      width: 100%;
-      padding: 8px;
-      background: rgba(255, 255, 255, 0.1);
-      border: 1px solid #00ffff;
-      border-radius: 5px;
-      color: white;
-      font-family: "Poppins", sans-serif;
-    }
-    .equation-display {
-      background: rgba(0, 255, 255, 0.1);
-      padding: 15px;
-      border-radius: 8px;
-      margin: 15px 0;
-      font-family: monospace;
-      border: 1px solid #00ffff33;
-      font-size: 14px;
-    }
-    .legend {
-      display: flex;
-      justify-content: center;
-      gap: 15px;
-      margin: 10px auto;
-      font-size: 13px;
-      flex-wrap: wrap;
-    }
-    .legend-item {
-      display: flex;
-      align-items: center;
-      gap: 5px;
-    }
-    .color-box {
-      width: 12px;
-      height: 12px;
-      border-radius: 50%;
-    }
-    .description {
-      margin: 10px 0;
-      font-size: 13px;
-      color: #aaa;
-      line-height: 1.4;
-    }
-    .update-btn {
-      background: #00ffff;
-      color: #000;
-      border: none;
-      border-radius: 20px;
-      padding: 12px 25px;
-      font-family: "Poppins", sans-serif;
-      font-weight: bold;
-      cursor: pointer;
-      transition: all 0.3s;
-      width: 100%;
-      margin-top: 10px;
-    }
-    .update-btn:hover {
-      background: #00cccc;
-      box-shadow: 0 0 15px #00ffff;
-    }
-    
-    @media (max-width: 1024px) {
-      .container {
-        flex-direction: column;
-        max-width: 95%;
-      }
-      .controls-panel {
-        width: 100%;
-        margin-right: 0;
-        margin-bottom: 20px;
-      }
-      #grafico {
-        height: 65vh;
-      }
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analisador de Cônicas com Pitágoras</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Courier New', monospace;
+            background: #1a1a1a;
+            color: #e0e0e0;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .container {
+            display: grid;
+            grid-template-columns: 400px 1fr;
+            height: 100vh;
+        }
+
+        .painel {
+            background: #242424;
+            padding: 20px;
+            overflow-y: auto;
+            border-right: 1px solid #333;
+        }
+
+        .area-grafico {
+            background: #1a1a1a;
+            position: relative;
+            cursor: move;
+        }
+
+        h1 {
+            font-size: 18px;
+            margin-bottom: 20px;
+            color: #4CAF50;
+            border-bottom: 1px solid #333;
+            padding-bottom: 10px;
+        }
+
+        h2 {
+            font-size: 14px;
+            margin-top: 20px;
+            margin-bottom: 10px;
+            color: #64B5F6;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 12px;
+            color: #999;
+        }
+
+        select, input {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 15px;
+            background: #1a1a1a;
+            border: 1px solid #333;
+            color: #e0e0e0;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: #4CAF50;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            background: #4CAF50;
+            border: none;
+            color: #000;
+            cursor: pointer;
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            font-size: 12px;
+            margin-bottom: 10px;
+        }
+
+        button:hover {
+            background: #66BB6A;
+        }
+
+        .resultado {
+            background: #1a1a1a;
+            padding: 15px;
+            margin-top: 20px;
+            border: 1px solid #333;
+            font-size: 11px;
+            line-height: 1.6;
+        }
+
+        .resultado strong {
+            color: #4CAF50;
+        }
+
+        canvas {
+            display: block;
+        }
+
+        .grupo-parametros {
+            display: block;
+        }
+
+        .verificacao {
+            background: #2a2a2a;
+            padding: 10px;
+            margin-top: 10px;
+            border-left: 3px solid #64B5F6;
+            font-size: 11px;
+        }
+
+        .formula {
+            color: #FFD54F;
+            font-style: italic;
+            margin: 5px 0;
+        }
+
+        .coordenadas {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            background: rgba(36, 36, 36, 0.9);
+            padding: 8px 12px;
+            border: 1px solid #333;
+            font-size: 11px;
+            color: #999;
+            z-index: 10;
+        }
+        
+        .grupo-botoes {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        
+        .grupo-botoes button {
+            flex: 1;
+        }
+        
+        .botao-equacao-geral {
+            background: #FF9800 !important;
+        }
+        
+        .botao-equacao-geral:hover {
+            background: #FFB74D !important;
+        }
+
+        .botao-passo-a-passo {
+            background: #2196F3 !important;
+        }
+        
+        .botao-passo-a-passo:hover {
+            background: #64B5F6 !important;
+        }
+
+        .dica {
+            position: absolute;
+            background: rgba(0, 0, 0, 0.95);
+            color: #FFD54F;
+            padding: 12px 15px;
+            border-radius: 8px;
+            font-size: 13px;
+            pointer-events: none;
+            z-index: 100;
+            max-width: 350px;
+            min-width: 250px;
+            border: 2px solid #FFD54F;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.7);
+            line-height: 1.4;
+        }
+
+        .dica::after {
+            content: '';
+            position: absolute;
+            top: -6px;
+            left: 15px;
+            width: 12px;
+            height: 12px;
+            background: rgba(0, 0, 0, 0.95);
+            transform: rotate(45deg);
+            border-left: 2px solid #FFD54F;
+            border-top: 2px solid #FFD54F;
+        }
+
+        .passo-a-passo {
+            background: #2a2a2a;
+            padding: 15px;
+            margin-top: 10px;
+            border: 1px solid #333;
+            font-size: 11px;
+            line-height: 1.6;
+        }
+
+        .passo {
+            margin-bottom: 10px;
+            padding: 8px;
+            background: #1a1a1a;
+            border-left: 3px solid #FFD54F;
+        }
+
+        .passo-atual {
+            background: #2d2d2d;
+            border-left: 3px solid #4CAF50;
+        }
+
+        .controles-passo {
+            display: flex;
+            gap: 5px;
+            margin-top: 10px;
+        }
+
+        .controles-passo button {
+            flex: 1;
+            padding: 5px;
+            font-size: 10px;
+        }
+
+        .pitagoras-info {
+            position: absolute;
+            background: rgba(0, 0, 0, 0.9);
+            color: white;
+            padding: 10px;
+            border-radius: 6px;
+            font-size: 11px;
+            border: 2px solid #FFD54F;
+            max-width: 200px;
+        }
+
+        .elemento-grafico {
+            position: absolute;
+            background: rgba(255, 213, 79, 0.1);
+            border: 1px dashed #FFD54F;
+            padding: 5px;
+            font-size: 10px;
+            color: #FFD54F;
+        }
+
+        .info-superior {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.9);
+            color: #FFD54F;
+            padding: 15px;
+            border-radius: 8px;
+            border: 2px solid #FFD54F;
+            font-size: 14px;
+            text-align: center;
+            z-index: 50;
+            max-width: 80%;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.7);
+        }
+        
+        .diretriz {
+            stroke-dasharray: 5, 5;
+        }
+    </style>
 </head>
 <body>
-  <h1>Superfícies Cônicas 3D — Parábola, Hipérbole e Elipse</h1>
-  
-  <div class="container">
-    <div class="controls-panel">
-      <div class="view-toggle">
-        <button class="view-btn active" data-view="3d">Visualização 3D</button>
-        <button class="view-btn" data-view="2d">Visualização 2D</button>
-      </div>
-      
-      <div class="render-toggle" id="render-toggle" style="display: none;">
-        <button class="render-btn active" data-render="surface">Superfície</button>
-        <button class="render-btn" data-render="points">Pontos</button>
-      </div>
-      
-      <div class="param-group">
-        <button class="curve-btn active" data-curve="parabola">Parábola</button>
-        <button class="curve-btn" data-curve="hiperbole">Hipérbole</button>
-        <button class="curve-btn" data-curve="elipse">Elipse</button>
-      </div>
-      
-      <div id="parabola-params" class="curve-params">
-        <div class="param-group">
-          <label for="parabola-a">Parâmetro p:</label>
-          <input type="number" id="parabola-a" class="param-input" value="2" step="0.1" min="0.1">
-        </div>
-        <div class="equation-display" id="parabola-equation">
-          y = x²/(4p)
-        </div>
-      </div>
-      
-      <div id="hiperbole-params" class="curve-params" style="display:none">
-        <div class="param-group">
-          <label for="hiperbole-a">Semi-eixo a:</label>
-          <input type="number" id="hiperbole-a" class="param-input" value="2" step="0.1" min="0.1">
-        </div>
-        <div class="param-group">
-          <label for="hiperbole-b">Semi-eixo b:</label>
-          <input type="number" id="hiperbole-b" class="param-input" value="1" step="0.1" min="0.1">
-        </div>
-        <div class="equation-display" id="hiperbole-equation">
-          x²/a² - y²/b² = 1
-        </div>
-      </div>
-      
-      <div id="elipse-params" class="curve-params" style="display:none">
-        <div class="param-group">
-          <label for="elipse-a">Semi-eixo a:</label>
-          <input type="number" id="elipse-a" class="param-input" value="5" step="0.1" min="0.1">
-        </div>
-        <div class="param-group">
-          <label for="elipse-b">Semi-eixo b:</label>
-          <input type="number" id="elipse-b" class="param-input" value="3" step="0.1" min="0.1">
-        </div>
-        <div class="equation-display" id="elipse-equation">
-          x²/a² + y²/b² = 1
-        </div>
-      </div>
-      
-      <div class="description" id="curve-description">
-        Uma parábola é o conjunto de pontos equidistantes de um foco e uma diretriz.
-      </div>
-      
-      <button class="update-btn" id="update-plot">Atualizar Gráfico</button>
-      
-      <div class="legend">
-        <div class="legend-item">
-          <div class="color-box" style="background-color: red;"></div>
-          <span>Foco</span>
-        </div>
-        <div class="legend-item">
-          <div class="color-box" style="background-color: yellow;"></div>
-          <span>Diretriz</span>
-        </div>
-        <div class="legend-item">
-          <div class="color-box" style="background-color: cyan;"></div>
-          <span>Centro</span>
-        </div>
-      </div>
-    </div>
-    
-    <div class="graphic-area">
-      <div id="grafico"></div>
-    </div>
-  </div>
+    <div class="container">
+        <div class="painel">
+            <h1>Analisador de Cônicas com Pitágoras</h1>
+            
+            <h2>Tipo de Cônica</h2>
+            <label>Selecione a cônica:</label>
+            <select id="tipoConica">
+                <option value="parabola">Parábola</option>
+                <option value="elipse">Elipse</option>
+                <option value="hiperbole">Hipérbole</option>
+                <option value="geral">Equação Geral</option>
+            </select>
 
-  <script>
-    let curvaAtual = 'parabola';
-    let visualizacaoAtual = '3d';
-    let renderizacaoAtual = 'surface';
-    
-    inicializarPlot();
-    
-    function inicializarPlot() {
-      atualizarPlot();
-      
-      document.querySelectorAll('.curve-btn').forEach(botao => {
-        botao.addEventListener('click', function() {
-          document.querySelectorAll('.curve-btn').forEach(b => b.classList.remove('active'));
-          this.classList.add('active');
-          curvaAtual = this.getAttribute('data-curve');
-          atualizarInterface();
+            <div id="parametros"></div>
+
+            <div class="grupo-botoes">
+                <button onclick="calcular()">Calcular e Visualizar</button>
+                <button class="botao-equacao-geral" onclick="alternarEquacaoGeral()" id="botaoEquacaoGeral">Equação Geral</button>
+            </div>
+
+            <button class="botao-passo-a-passo" onclick="iniciarPassoAPasso()" id="botaoPassoAPasso">Mostrar Passo a Passo com Pitágoras</button>
+
+            <div id="resultado" class="resultado" style="display: none;"></div>
+            <div id="passoAPasso" class="passo-a-passo" style="display: none;"></div>
+        </div>
+
+        <div class="area-grafico" id="areaGrafico">
+            <canvas id="canvas"></canvas>
+            <div class="coordenadas" id="coordenadas">x: 0, y: 0</div>
+            <div class="dica" id="dica" style="display: none;"></div>
+            <div class="info-superior" id="infoSuperior" style="display: none;"></div>
+        </div>
+    </div>
+
+    <script>
+        // Elementos do DOM
+        const canvas = document.getElementById('canvas');
+        const contexto = canvas.getContext('2d');
+        const areaGrafico = document.getElementById('areaGrafico');
+        const displayCoordenadas = document.getElementById('coordenadas');
+        const dica = document.getElementById('dica');
+        const infoSuperior = document.getElementById('infoSuperior');
+
+        // Variáveis de estado do gráfico
+        let deslocamentoX = 0;
+        let deslocamentoY = 0;
+        let escala = 40;
+        let arrastando = false;
+        let ultimoX, ultimoY;
+
+        let conicaAtual = null;
+        let modoEquacaoGeral = false;
+        let elementoSobreMouse = null;
+
+        // Variáveis para passo a passo
+        let modoPassoAPasso = false;
+        let passoAtual = 0;
+        let totalPassos = 0;
+        let passos = [];
+
+        // Configuração inicial do canvas
+        function redimensionarCanvas() {
+            canvas.width = areaGrafico.clientWidth;
+            canvas.height = areaGrafico.clientHeight;
+            desenhar();
+        }
+
+        window.addEventListener('resize', redimensionarCanvas);
+        redimensionarCanvas();
+
+        // Interações com o mouse
+        canvas.addEventListener('mousedown', (e) => {
+            arrastando = true;
+            ultimoX = e.clientX;
+            ultimoY = e.clientY;
         });
-      });
-      
-      document.querySelectorAll('.view-btn').forEach(botao => {
-        botao.addEventListener('click', function() {
-          document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
-          this.classList.add('active');
-          visualizacaoAtual = this.getAttribute('data-view');
-          atualizarRenderToggle();
-          atualizarPlot();
+
+        canvas.addEventListener('mousemove', (e) => {
+            const retangulo = canvas.getBoundingClientRect();
+            const mouseX = e.clientX - retangulo.left;
+            const mouseY = e.clientY - retangulo.top;
+            const x = ((mouseX - canvas.width / 2 - deslocamentoX) / escala).toFixed(2);
+            const y = (-(mouseY - canvas.height / 2 - deslocamentoY) / escala).toFixed(2);
+            
+            // Verificar se o mouse está sobre elementos da cônica
+            let sobreCurva = false;
+            let infoCurva = '';
+            elementoSobreMouse = null;
+
+            if (conicaAtual) {
+                // Verificar se está sobre os focos
+                if (conicaAtual.foco1) {
+                    const foco1X = canvas.width / 2 + deslocamentoX + conicaAtual.foco1.x * escala;
+                    const foco1Y = canvas.height / 2 + deslocamentoY - conicaAtual.foco1.y * escala;
+                    const distancia1 = Math.sqrt((mouseX - foco1X) ** 2 + (mouseY - foco1Y) ** 2);
+                    if (distancia1 < 8) {
+                        elementoSobreMouse = {
+                            tipo: 'foco',
+                            indice: 1,
+                            x: conicaAtual.foco1.x,
+                            y: conicaAtual.foco1.y
+                        };
+                    }
+                }
+
+                if (conicaAtual.foco2 && !elementoSobreMouse) {
+                    const foco2X = canvas.width / 2 + deslocamentoX + conicaAtual.foco2.x * escala;
+                    const foco2Y = canvas.height / 2 + deslocamentoY - conicaAtual.foco2.y * escala;
+                    const distancia2 = Math.sqrt((mouseX - foco2X) ** 2 + (mouseY - foco2Y) ** 2);
+                    if (distancia2 < 8) {
+                        elementoSobreMouse = {
+                            tipo: 'foco',
+                            indice: 2,
+                            x: conicaAtual.foco2.x,
+                            y: conicaAtual.foco2.y
+                        };
+                    }
+                }
+
+                // Verificar se está sobre a curva
+                if (!elementoSobreMouse) {
+                    if (conicaAtual.tipo === 'parabola') {
+                        const { p, h, k } = conicaAtual;
+                        const yNaCurva = ((x - h) ** 2) / (4 * p) + k;
+                        if (Math.abs(parseFloat(y) - yNaCurva) < 0.5) {
+                            sobreCurva = true;
+                            infoCurva = `Ponto na parábola: (${x}, ${y})`;
+                        }
+                    } else if (conicaAtual.tipo === 'elipse') {
+                        const { a, b, h, k } = conicaAtual;
+                        const valor = ((parseFloat(x) - h) ** 2) / (a ** 2) + ((parseFloat(y) - k) ** 2) / (b ** 2);
+                        if (Math.abs(valor - 1) < 0.1) {
+                            sobreCurva = true;
+                            infoCurva = `Ponto na elipse: (${x}, ${y})`;
+                        }
+                    } else if (conicaAtual.tipo === 'hiperbole') {
+                        const { a, b, h, k } = conicaAtual;
+                        const valor = ((parseFloat(x) - h) ** 2) / (a ** 2) - ((parseFloat(y) - k) ** 2) / (b ** 2);
+                        if (Math.abs(valor - 1) < 0.1) {
+                            sobreCurva = true;
+                            infoCurva = `Ponto na hipérbole: (${x}, ${y})`;
+                        }
+                    } else if (conicaAtual.tipo === 'geral') {
+                        const { A, B, C, D, E, F } = conicaAtual;
+                        const valor = A * x * x + B * x * y + C * y * y + D * x + E * y + F;
+                        if (Math.abs(valor) < 0.5) {
+                            sobreCurva = true;
+                            infoCurva = `Ponto na ${conicaAtual.tipoConica.toLowerCase()}: (${x}, ${y})`;
+                        }
+                    }
+                }
+            }
+            
+            // Atualizar display de coordenadas
+            displayCoordenadas.textContent = `x: ${x}, y: ${y}${sobreCurva ? ' [na curva]' : ''}`;
+            displayCoordenadas.style.color = sobreCurva ? '#4CAF50' : '#999';
+
+            // Mostrar dica para elementos sob o mouse
+            if (elementoSobreMouse) {
+                if (elementoSobreMouse.tipo === 'foco') {
+                    dica.innerHTML = `<strong>Foco F${elementoSobreMouse.indice}</strong><br>Coordenadas: (${elementoSobreMouse.x.toFixed(2)}, ${elementoSobreMouse.y.toFixed(2)})<br>Distância focal: ${conicaAtual?.c?.toFixed(2) || 'N/A'}`;
+                    dica.style.display = 'block';
+                    dica.style.left = (e.clientX + 10) + 'px';
+                    dica.style.top = (e.clientY - 80) + 'px';
+                }
+            } else if (sobreCurva) {
+                dica.innerHTML = `<strong>${infoCurva}</strong><br>Clique e arraste para mover o gráfico<br>Use a roda do mouse para zoom`;
+                dica.style.display = 'block';
+                dica.style.left = (e.clientX + 10) + 'px';
+                dica.style.top = (e.clientY - 90) + 'px';
+            } else {
+                dica.style.display = 'none';
+            }
+
+            if (arrastando) {
+                deslocamentoX += e.clientX - ultimoX;
+                deslocamentoY += e.clientY - ultimoY;
+                ultimoX = e.clientX;
+                ultimoY = e.clientY;
+                desenhar();
+            }
         });
-      });
-      
-      document.querySelectorAll('.render-btn').forEach(botao => {
-        botao.addEventListener('click', function() {
-          document.querySelectorAll('.render-btn').forEach(b => b.classList.remove('active'));
-          this.classList.add('active');
-          renderizacaoAtual = this.getAttribute('data-render');
-          atualizarPlot();
+
+        canvas.addEventListener('mouseup', () => {
+            arrastando = false;
         });
-      });
-      
-      document.getElementById('update-plot').addEventListener('click', atualizarPlot);
-      
-      document.querySelectorAll('.param-input').forEach(input => {
-        input.addEventListener('input', atualizarEquacaoDisplay);
-      });
-      
-      atualizarInterface();
-    }
-    
-    function atualizarRenderToggle() {
-      const renderToggle = document.getElementById('render-toggle');
-      if (visualizacaoAtual === '3d') {
-        renderToggle.style.display = 'flex';
-      } else {
-        renderToggle.style.display = 'none';
-      }
-    }
-    
-    function atualizarInterface() {
-      document.querySelectorAll('.curve-params').forEach(painel => {
-        painel.style.display = 'none';
-      });
-      
-      document.getElementById(`${curvaAtual}-params`).style.display = 'block';
-      atualizarDescricao();
-      atualizarEquacaoDisplay();
-      atualizarRenderToggle();
-    }
-    
-    function atualizarDescricao() {
-      const descricao = document.getElementById('curve-description');
-      
-      switch(curvaAtual) {
-        case 'parabola':
-          descricao.textContent = "Uma parábola é o conjunto de pontos equidistantes de um foco e uma diretriz.";
-          break;
-        case 'hiperbole':
-          descricao.textContent = "Uma hipérbole é o conjunto de pontos onde a diferença das distâncias a dois focos é constante.";
-          break;
-        case 'elipse':
-          descricao.textContent = "Uma elipse é o conjunto de pontos onde a soma das distâncias a dois focos é constante.";
-          break;
-      }
-    }
-    
-    function atualizarEquacaoDisplay() {
-      let a, b;
-      
-      switch(curvaAtual) {
-        case 'parabola':
-          a = document.getElementById('parabola-a').value;
-          document.getElementById('parabola-equation').innerHTML = 
-            `y = x²/(4×${a})`;
-          break;
-        case 'hiperbole':
-          a = document.getElementById('hiperbole-a').value;
-          b = document.getElementById('hiperbole-b').value;
-          document.getElementById('hiperbole-equation').innerHTML = 
-            `x²/${a}² - y²/${b}² = 1`;
-          break;
-        case 'elipse':
-          a = document.getElementById('elipse-a').value;
-          b = document.getElementById('elipse-b').value;
-          document.getElementById('elipse-equation').innerHTML = 
-            `x²/${a}² + y²/${b}² = 1`;
-          break;
-      }
-    }
-    
-    function atualizarPlot() {
-      if (visualizacaoAtual === '3d') {
-        criarPlot3D();
-      } else {
-        criarPlot2D();
-      }
-    }
-    
-    function criarPlot3D() {
-      let x = [], y = [];
-      const passo = renderizacaoAtual === 'surface' ? 0.15 : 0.3;
-      
-      let a, b;
-      
-      switch(curvaAtual) {
-        case 'parabola':
-          a = parseFloat(document.getElementById('parabola-a').value);
-          for (let i = -4; i <= 4; i += passo) {
-            x.push(i);
-          }
-          for (let j = -4; j <= 4; j += passo) {
-            y.push(j);
-          }
-          
-          const z_parabola = [];
-          for (let i = 0; i < y.length; i++) {
-            const linha = [];
-            for (let j = 0; j < x.length; j++) {
-              linha.push((x[j] * x[j] + y[i] * y[i]) / (4 * a));
+
+        canvas.addEventListener('wheel', (e) => {
+            e.preventDefault();
+            const fatorZoom = e.deltaY > 0 ? 0.9 : 1.1;
+            escala *= fatorZoom;
+            desenhar();
+        });
+
+        // Atualizar parâmetros baseado no tipo de cônica
+        document.getElementById('tipoConica').addEventListener('change', atualizarParametros);
+
+        function atualizarParametros() {
+            const tipo = document.getElementById('tipoConica').value;
+            const divParametros = document.getElementById('parametros');
+            
+            if (tipo === 'parabola') {
+                divParametros.innerHTML = `
+                    <h2>Parâmetros da Parábola</h2>
+                    <label>Parâmetro focal (p):</label>
+                    <input type="number" id="paramP" value="1" step="0.1" min="0.1">
+                    <label>Centro X (h):</label>
+                    <input type="number" id="centroX" value="0" step="0.1">
+                    <label>Centro Y (k):</label>
+                    <input type="number" id="centroY" value="0" step="0.1">
+                `;
+            } else if (tipo === 'elipse') {
+                divParametros.innerHTML = `
+                    <h2>Parâmetros da Elipse</h2>
+                    <label>A (semi-eixo maior):</label>
+                    <input type="number" id="paramA" value="5" step="0.1" min="0.1">
+                    <label>B (semi-eixo menor):</label>
+                    <input type="number" id="paramB" value="3" step="0.1" min="0.1">
+                    <label>Centro X:</label>
+                    <input type="number" id="centroX" value="0" step="0.1">
+                    <label>Centro Y:</label>
+                    <input type="number" id="centroY" value="0" step="0.1">
+                `;
+            } else if (tipo === 'hiperbole') {
+                divParametros.innerHTML = `
+                    <h2>Parâmetros da Hipérbole</h2>
+                    <label>A (semi-eixo transverso):</label>
+                    <input type="number" id="paramA" value="4" step="0.1" min="0.1">
+                    <label>B (semi-eixo conjugado):</label>
+                    <input type="number" id="paramB" value="3" step="0.1" min="0.1">
+                    <label>Centro X:</label>
+                    <input type="number" id="centroX" value="0" step="0.1">
+                    <label>Centro Y:</label>
+                    <input type="number" id="centroY" value="0" step="0.1">
+                `;
+            } else if (tipo === 'geral') {
+                divParametros.innerHTML = `
+                    <h2>Equação Geral da Cônica</h2>
+                    <label>A (coeficiente de x²):</label>
+                    <input type="number" id="paramA" value="1" step="0.1">
+                    <label>B (coeficiente de xy):</label>
+                    <input type="number" id="paramB" value="0" step="0.1">
+                    <label>C (coeficiente de y²):</label>
+                    <input type="number" id="paramC" value="1" step="0.1">
+                    <label>D (coeficiente de x):</label>
+                    <input type="number" id="paramD" value="0" step="0.1">
+                    <label>E (coeficiente de y):</label>
+                    <input type="number" id="paramE" value="0" step="0.1">
+                    <label>F (termo constante):</label>
+                    <input type="number" id="paramF" value="-1" step="0.1">
+                `;
             }
-            z_parabola.push(linha);
-          }
-          
-          criarSuperficie3D(x, y, z_parabola, 'Viridis');
-          break;
-          
-        case 'hiperbole':
-          a = parseFloat(document.getElementById('hiperbole-a').value);
-          b = parseFloat(document.getElementById('hiperbole-b').value);
-          
-          for (let i = -3; i <= 3; i += passo) {
-            x.push(i);
-          }
-          for (let j = -3; j <= 3; j += passo) {
-            y.push(j);
-          }
-          
-          const z_hiperbole_pos = [];
-          const z_hiperbole_neg = [];
-          const c = Math.sqrt(a * a + b * b);
-          
-          for (let i = 0; i < y.length; i++) {
-            const linha_pos = [];
-            const linha_neg = [];
-            for (let j = 0; j < x.length; j++) {
-              const valor = (x[j] * x[j]) / (a * a) + (y[i] * y[i]) / (b * b) - 1;
-              if (valor > 0) {
-                const z_val = Math.sqrt(valor) * c;
-                linha_pos.push(z_val);
-                linha_neg.push(-z_val);
-              } else {
-                linha_pos.push(0);
-                linha_neg.push(0);
-              }
+        }
+
+        function alternarEquacaoGeral() {
+            const seletorTipo = document.getElementById('tipoConica');
+            if (modoEquacaoGeral) {
+                seletorTipo.value = 'parabola';
+                document.getElementById('botaoEquacaoGeral').textContent = 'Equação Geral';
+            } else {
+                seletorTipo.value = 'geral';
+                document.getElementById('botaoEquacaoGeral').textContent = 'Forma Padrão';
             }
-            z_hiperbole_pos.push(linha_pos);
-            z_hiperbole_neg.push(linha_neg);
-          }
-          
-          criarSuperficieHiperbole3D(x, y, z_hiperbole_pos, z_hiperbole_neg, 'Hot');
-          break;
-          
-        case 'elipse':
-          a = parseFloat(document.getElementById('elipse-a').value);
-          b = parseFloat(document.getElementById('elipse-b').value);
-          
-          const theta = [], phi = [];
-          for (let t = 0; t <= Math.PI; t += passo) {
-            theta.push(t);
-          }
-          for (let p = 0; p <= 2 * Math.PI; p += passo) {
-            phi.push(p);
-          }
-          
-          const x_elipse = [], y_elipse = [], z_elipse = [];
-          for (let i = 0; i < theta.length; i++) {
-            const linha_x = [], linha_y = [], linha_z = [];
-            for (let j = 0; j < phi.length; j++) {
-              const t = theta[i];
-              const p = phi[j];
-              linha_x.push(a * Math.sin(t) * Math.cos(p));
-              linha_y.push(b * Math.sin(t) * Math.sin(p));
-              linha_z.push(b * Math.cos(t));
+            modoEquacaoGeral = !modoEquacaoGeral;
+            atualizarParametros();
+        }
+
+        function iniciarPassoAPasso() {
+            modoPassoAPasso = true;
+            passoAtual = 0;
+            document.getElementById('botaoPassoAPasso').textContent = 'Reiniciar Passo a Passo';
+            document.getElementById('passoAPasso').style.display = 'block';
+            prepararPassos();
+            mostrarPassoAtual();
+        }
+
+        function prepararPassos() {
+            const tipo = document.getElementById('tipoConica').value;
+            passos = [];
+
+            if (tipo === 'parabola') {
+                passos = [
+                    "Passo 1: Definir parâmetro focal p e vértice (h,k)",
+                    "Passo 2: Localizar foco F = (h, k + p)",
+                    "Passo 3: Traçar diretriz y = k - p",
+                    "Passo 4: Definir equação: (x - h)² = 4p(y - k)",
+                    "Passo 5: Verificar propriedade: dist(P,F) = dist(P,diretriz)"
+                ];
+            } else if (tipo === 'elipse') {
+                passos = [
+                    "Passo 1: Definir semi-eixos a e b e centro (h,k)",
+                    "Passo 2: Cálculo gráfico da posição dos focos",
+                    "Passo 3: Propriedade fundamental: PF₁ + PF₂ = 2a (constante)",
+                    "Passo 4: Deduzir equação da elipse",
+                    "Passo 5: Verificar equação com pontos específicos"
+                ];
+            } else if (tipo === 'hiperbole') {
+                passos = [
+                    "Passo 1: Definir semi-eixos a e b e centro (h,k)",
+                    "Passo 2: Calcular distância focal c = √(a² + b²) [Pitágoras]",
+                    "Passo 3: Localizar focos F₁ = (h + c, k) e F₂ = (h - c, k)",
+                    "Passo 4: Definir equação: (x-h)²/a² - (y-k)²/b² = 1",
+                    "Passo 5: Verificar propriedade: |PF₁ - PF₂| = 2a"
+                ];
+            } else if (tipo === 'geral') {
+                passos = [
+                    "Passo 1: Inserir coeficientes da equação geral",
+                    "Passo 2: Calcular discriminante Δ = B² - 4AC para classificação",
+                    "Passo 3: Calcular centro da cônica",
+                    "Passo 4: Calcular focos e rotação (quando B ≠ 0)",
+                    "Passo 5: Visualizar cônica com focos e rotação"
+                ];
             }
-            x_elipse.push(linha_x);
-            y_elipse.push(linha_y);
-            z_elipse.push(linha_z);
-          }
-          
-          criarSuperficieElipsoide3D(x_elipse, y_elipse, z_elipse, 'Electric');
-          break;
-      }
-    }
-    
-    function criarSuperficie3D(x, y, z, escalaCores) {
-      let superficie;
-      
-      if (renderizacaoAtual === 'surface') {
-        superficie = {
-          x: x,
-          y: y, 
-          z: z,
-          type: 'surface',
-          colorscale: escalaCores,
-          opacity: 0.95,
-          showscale: false,
-          name: 'Superfície',
-          lighting: {
-            diffuse: 0.8,
-            specular: 0.1
-          }
-        };
-      } else {
-        const x_pontos = [], y_pontos = [], z_pontos = [];
-        for (let i = 0; i < y.length; i++) {
-          for (let j = 0; j < x.length; j++) {
-            x_pontos.push(x[j]);
-            y_pontos.push(y[i]);
-            z_pontos.push(z[i][j]);
-          }
+
+            totalPassos = passos.length;
+        }
+
+        function mostrarPassoAtual() {
+            const divPassoAPasso = document.getElementById('passoAPasso');
+            let html = `<h3>Passo a Passo com Pitágoras (${passoAtual + 1}/${totalPassos})</h3>`;
+            
+            passos.forEach((passo, index) => {
+                const classe = index === passoAtual ? 'passo passo-atual' : 'passo';
+                html += `<div class="${classe}">${passo}</div>`;
+            });
+
+            // Adicionar demonstração matemática específica
+            const tipo = document.getElementById('tipoConica').value;
+            if (tipo === 'elipse') {
+                const a = parseFloat(document.getElementById('paramA').value);
+                const b = parseFloat(document.getElementById('paramB').value);
+                const c = Math.sqrt(Math.abs(a * a - b * b));
+                
+                if (passoAtual === 1) { // Cálculo gráfico dos focos
+                    html += `
+                        <div class="verificacao">
+                            <strong>Cálculo Gráfico da Posição dos Focos:</strong><br>
+                            <div class="formula">Usando o triângulo retângulo C → B₁ → F₁:</div>
+                            <div class="formula">No ponto B₁(${conicaAtual?.B1?.x || 0}, ${conicaAtual?.B1?.y || b}):</div>
+                            <div class="formula">Distância C→B₁ = b = ${b}</div>
+                            <div class="formula">Distância C→F₁ = c = √(a² - b²)</div>
+                            <div class="formula">c = √(${a}² - ${b}²) = √${a*a - b*b} = ${c.toFixed(3)}</div>
+                            <div class="formula">F₁ = (h + c, k) = (0 + ${c.toFixed(3)}, 0) = (${c.toFixed(3)}, 0)</div>
+                            <div class="formula">F₂ = (h - c, k) = (0 - ${c.toFixed(3)}, 0) = (-${c.toFixed(3)}, 0)</div>
+                        </div>
+                    `;
+                } else if (passoAtual === 2) { // Propriedade fundamental
+                    html += `
+                        <div class="verificacao">
+                            <strong>Propriedade Fundamental da Elipse:</strong><br>
+                            <div class="formula">Para qualquer ponto P na elipse: PF₁ + PF₂ = 2a</div>
+                            <div class="formula">d(P₁F₁) + d(P₁F₂) = d(P₂F₁) + d(P₂F₂) = d(B₁F₁) + d(B₁F₂) = 2a</div>
+                            <div class="formula">2a = ${(2*a).toFixed(1)} (constante)</div>
+                        </div>
+                    `;
+                }
+            } else if (tipo === 'geral') {
+                const A = parseFloat(document.getElementById('paramA').value);
+                const B = parseFloat(document.getElementById('paramB').value);
+                const C = parseFloat(document.getElementById('paramC').value);
+                const discriminante = B * B - 4 * A * C;
+                
+                if (passoAtual === 1) { // Discriminante
+                    html += `
+                        <div class="verificacao">
+                            <strong>Cálculo do Discriminante:</strong><br>
+                            <div class="formula">Δ = B² - 4AC</div>
+                            <div class="formula">Δ = ${B}² - 4 × ${A} × ${C}</div>
+                            <div class="formula">Δ = ${B*B} - ${4*A*C}</div>
+                            <div class="formula">Δ = ${discriminante.toFixed(3)}</div>
+                            <div class="formula">${discriminante < 0 ? 'Δ < 0 → Elipse' : discriminante === 0 ? 'Δ = 0 → Parábola' : 'Δ > 0 → Hipérbole'}</div>
+                        </div>
+                    `;
+                } else if (passoAtual === 2) { // Centro
+                    if (conicaAtual && conicaAtual.centro) {
+                        html += `
+                            <div class="verificacao">
+                                <strong>Cálculo do Centro:</strong><br>
+                                <div class="formula">Centro: (${conicaAtual.centro.x.toFixed(2)}, ${conicaAtual.centro.y.toFixed(2)})</div>
+                            </div>
+                        `;
+                    }
+                } else if (passoAtual === 3) { // Focos e rotação
+                    if (conicaAtual && conicaAtual.foco1 && conicaAtual.foco2) {
+                        const angulo = B !== 0 ? 0.5 * Math.atan(B / (A - C)) * 180 / Math.PI : 0;
+                        html += `
+                            <div class="verificacao">
+                                <strong>Cálculo dos Focos e Rotação:</strong><br>
+                                <div class="formula">Ângulo de rotação: θ = ½ arctan(B/(A-C)) = ${angulo.toFixed(1)}°</div>
+                                <div class="formula">Foco 1: (${conicaAtual.foco1.x.toFixed(3)}, ${conicaAtual.foco1.y.toFixed(3)})</div>
+                                <div class="formula">Foco 2: (${conicaAtual.foco2.x.toFixed(3)}, ${conicaAtual.foco2.y.toFixed(3)})</div>
+                                ${B !== 0 ? '<div class="formula">Quando B ≠ 0, os focos giram com a cônica</div>' : ''}
+                            </div>
+                        `;
+                    }
+                }
+            }
+
+            html += `
+                <div class="controles-passo">
+                    <button onclick="passoAnterior()" ${passoAtual === 0 ? 'disabled' : ''}>Anterior</button>
+                    <button onclick="proximoPasso()" ${passoAtual === totalPassos - 1 ? 'disabled' : ''}>Próximo</button>
+                    <button onclick="finalizarPassoAPasso()">Finalizar</button>
+                </div>
+            `;
+
+            divPassoAPasso.innerHTML = html;
+            desenhar();
+        }
+
+        function proximoPasso() {
+            if (passoAtual < totalPassos - 1) {
+                passoAtual++;
+                mostrarPassoAtual();
+            }
+        }
+
+        function passoAnterior() {
+            if (passoAtual > 0) {
+                passoAtual--;
+                mostrarPassoAtual();
+            }
+        }
+
+        function finalizarPassoAPasso() {
+            modoPassoAPasso = false;
+            document.getElementById('botaoPassoAPasso').textContent = 'Mostrar Passo a Passo com Pitágoras';
+            document.getElementById('passoAPasso').style.display = 'none';
+            infoSuperior.style.display = 'none';
+            desenhar();
+        }
+
+        atualizarParametros();
+
+        // Função principal de cálculo
+        function calcular() {
+            const tipo = document.getElementById('tipoConica').value;
+            
+            if (tipo === 'parabola') {
+                calcularParabola();
+            } else if (tipo === 'elipse') {
+                calcularElipse();
+            } else if (tipo === 'hiperbole') {
+                calcularHiperbole();
+            } else if (tipo === 'geral') {
+                calcularGeral();
+            }
+        }
+
+        function calcularParabola() {
+            const p = parseFloat(document.getElementById('paramP').value);
+            const h = parseFloat(document.getElementById('centroX').value);
+            const k = parseFloat(document.getElementById('centroY').value);
+
+            const foco = { x: h, y: k + p };
+            const diretriz = k - p;
+
+            conicaAtual = {
+                tipo: 'parabola',
+                p, h, k, foco, diretriz
+            };
+
+            const divResultado = document.getElementById('resultado');
+            divResultado.style.display = 'block';
+            divResultado.innerHTML = `
+                <strong>PARÁBOLA</strong><br><br>
+                <div class="formula">Equação: (x - h)² = 4p(y - k)</div>
+                <div class="formula">(x - ${h})² = ${4 * p}(y - ${k})</div><br>
+                
+                <strong>Resultados:</strong><br>
+                Centro: (${h}, ${k})<br>
+                Parâmetro focal: p = ${p}<br>
+                Foco: (${foco.x.toFixed(3)}, ${foco.y.toFixed(3)})<br>
+                Diretriz: y = ${diretriz.toFixed(3)}<br>
+                <strong>Excentricidade: e = 1.000</strong><br>
+            `;
+
+            desenhar();
+        }
+
+        function calcularElipse() {
+            const a = parseFloat(document.getElementById('paramA').value);
+            const b = parseFloat(document.getElementById('paramB').value);
+            const h = parseFloat(document.getElementById('centroX').value);
+            const k = parseFloat(document.getElementById('centroY').value);
+
+            const ehHorizontal = a > b;
+            const eixoMaior = Math.max(a, b);
+            const eixoMenor = Math.min(a, b);
+            const c = Math.sqrt(Math.abs(eixoMaior * eixoMaior - eixoMenor * eixoMenor));
+            const e = c / eixoMaior;
+
+            let foco1, foco2;
+            
+            if (ehHorizontal) {
+                foco1 = { x: h + c, y: k };
+                foco2 = { x: h - c, y: k };
+            } else {
+                foco1 = { x: h, y: k + c };
+                foco2 = { x: h, y: k - c };
+            }
+
+            // Calcular diretrizes para elipse
+            // Para elipse: diretrizes são x = h ± a/e (horizontal) ou y = k ± a/e (vertical)
+            let diretriz1, diretriz2;
+            if (ehHorizontal) {
+                diretriz1 = { tipo: 'vertical', valor: h + a/e };
+                diretriz2 = { tipo: 'vertical', valor: h - a/e };
+            } else {
+                diretriz1 = { tipo: 'horizontal', valor: k + a/e };
+                diretriz2 = { tipo: 'horizontal', valor: k - a/e };
+            }
+
+            // Definir vértices e pontos dos eixos
+            const A1 = { x: h - a, y: k };
+            const A2 = { x: h + a, y: k };
+            const B1 = { x: h, y: k + b };
+            const B2 = { x: h, y: k - b };
+
+            // Definir pontos P1 e P2 para demonstração
+            const p1 = { x: h + a * 0.7, y: k + Math.sqrt(b*b * (1 - (0.7*0.7))) };
+            const p2 = { x: h - a * 0.6, y: k + Math.sqrt(b*b * (1 - (0.6*0.6))) };
+
+            conicaAtual = {
+                tipo: 'elipse',
+                a, b, h, k, c, e, foco1, foco2, ehHorizontal,
+                diretriz1, diretriz2,
+                A1, A2, B1, B2, p1, p2
+            };
+
+            const divResultado = document.getElementById('resultado');
+            divResultado.style.display = 'block';
+            
+            divResultado.innerHTML = `
+                <strong>ELIPSE</strong><br><br>
+                <div class="formula">Equação: (x-h)²/a² + (y-k)²/b² = 1</div>
+                <div class="formula">(x-${h})²/${a}² + (y-${k})²/${b}² = 1</div><br>
+                
+                <strong>Resultados:</strong><br>
+                Centro: C(${h}, ${k})<br>
+                Semi-eixos: a = ${a}, b = ${b}<br>
+                Distância focal: c = ${c.toFixed(3)}<br>
+                Foco 1: F₁(${foco1.x.toFixed(3)}, ${foco1.y.toFixed(3)})<br>
+                Foco 2: F₂(${foco2.x.toFixed(3)}, ${foco2.y.toFixed(3)})<br>
+                Vértices: A₁(${A1.x}, ${A1.y}), A₂(${A2.x}, ${A2.y})<br>
+                Pontos do eixo menor: B₁(${B1.x}, ${B1.y}), B₂(${B2.x}, ${B2.y})<br>
+                <strong>Excentricidade: e = ${e.toFixed(6)}</strong><br>
+                <strong>Propriedade: PF₁ + PF₂ = 2a = ${(2*a).toFixed(1)} (constante)</strong><br>
+                <strong>Diretrizes:</strong><br>
+                ${ehHorizontal ? 
+                    `x = ${diretriz1.valor.toFixed(3)} e x = ${diretriz2.valor.toFixed(3)}` : 
+                    `y = ${diretriz1.valor.toFixed(3)} e y = ${diretriz2.valor.toFixed(3)}`
+                }
+            `;
+
+            desenhar();
+        }
+
+        function calcularHiperbole() {
+            const a = parseFloat(document.getElementById('paramA').value);
+            const b = parseFloat(document.getElementById('paramB').value);
+            const h = parseFloat(document.getElementById('centroX').value);
+            const k = parseFloat(document.getElementById('centroY').value);
+
+            const c = Math.sqrt(a * a + b * b);
+            const e = c / a;
+
+            const foco1 = { x: h + c, y: k };
+            const foco2 = { x: h - c, y: k };
+
+            // Calcular diretrizes para hipérbole
+            // Para hipérbole: diretrizes são x = h ± a/e
+            const diretriz1 = { tipo: 'vertical', valor: h + a/e };
+            const diretriz2 = { tipo: 'vertical', valor: h - a/e };
+
+            conicaAtual = {
+                tipo: 'hiperbole',
+                a, b, h, k, c, e, foco1, foco2,
+                diretriz1, diretriz2
+            };
+
+            const divResultado = document.getElementById('resultado');
+            divResultado.style.display = 'block';
+            divResultado.innerHTML = `
+                <strong>HIPÉRBOLE</strong><br><br>
+                <div class="formula">Equação: (x-h)²/a² - (y-k)²/b² = 1</div>
+                <div class="formula">(x-${h})²/${a}² - (y-${k})²/${b}² = 1</div><br>
+                
+                <strong>Resultados:</strong><br>
+                Centro: (${h}, ${k})<br>
+                Semi-eixos: a = ${a}, b = ${b}<br>
+                Distância focal: c = ${c.toFixed(3)}<br>
+                Foco 1: (${foco1.x.toFixed(3)}, ${foco1.y.toFixed(3)})<br>
+                Foco 2: (${foco2.x.toFixed(3)}, ${foco2.y.toFixed(3)})<br>
+                <strong>Excentricidade: e = ${e.toFixed(6)}</strong><br>
+                <strong>Diretrizes:</strong><br>
+                x = ${diretriz1.valor.toFixed(3)} e x = ${diretriz2.valor.toFixed(3)}
+            `;
+
+            desenhar();
+        }
+
+        function calcularGeral() {
+            const A = parseFloat(document.getElementById('paramA').value);
+            const B = parseFloat(document.getElementById('paramB').value);
+            const C = parseFloat(document.getElementById('paramC').value);
+            const D = parseFloat(document.getElementById('paramD').value);
+            const E = parseFloat(document.getElementById('paramE').value);
+            const F_val = parseFloat(document.getElementById('paramF').value);
+
+            // Classificar a cônica baseado no discriminante
+            const discriminante = B * B - 4 * A * C;
+            let tipoConica = '';
+            
+            if (discriminante < 0) {
+                if (A === C && B === 0) {
+                    tipoConica = 'Círculo';
+                } else {
+                    tipoConica = 'Elipse';
+                }
+            } else if (discriminante === 0) {
+                tipoConica = 'Parábola';
+            } else {
+                tipoConica = 'Hipérbole';
+            }
+
+            // Calcular rotação para eliminar o termo Bxy
+            let rotationAngle = 0;
+            if (B !== 0 && A !== C) {
+                rotationAngle = 0.5 * Math.atan2(B, A - C);
+            } else if (B !== 0) {
+                rotationAngle = Math.PI / 4; // 45 graus quando A = C
+            }
+
+            // Calcular matriz de rotação
+            const cos = Math.cos(rotationAngle);
+            const sin = Math.sin(rotationAngle);
+            
+            // Calcular novos coeficientes após rotação
+            const A_prime = A * cos * cos + B * cos * sin + C * sin * sin;
+            const C_prime = A * sin * sin - B * cos * sin + C * cos * cos;
+            const D_prime = D * cos + E * sin;
+            const E_prime = -D * sin + E * cos;
+            const F_prime = F_val;
+
+            // Calcular centro da cônica
+            let centerX, centerY;
+            if (B === 0) {
+                centerX = -D / (2 * A);
+                centerY = -E / (2 * C);
+            } else {
+                const denominator = 4 * A * C - B * B;
+                centerX = (B * E - 2 * C * D) / denominator;
+                centerY = (B * D - 2 * A * E) / denominator;
+            }
+
+            // Calcular focos, diretrizes e excentricidade
+            let focus1, focus2, directrix1, directrix2, eccentricity;
+            
+            if (tipoConica === 'Parábola') {
+                // Para parábola, simplificar para forma padrão
+                const p = 1 / (4 * A_prime);
+                const h = centerX;
+                const k = centerY;
+                
+                focus1 = { x: h, y: k + p };
+                directrix1 = { tipo: 'horizontal', valor: k - p };
+                eccentricity = 1;
+            } else if (tipoConica === 'Elipse' || tipoConica === 'Círculo') {
+                // Para elipse/círculo
+                const a_sq = -F_prime / A_prime;
+                const b_sq = -F_prime / C_prime;
+                const a = Math.sqrt(Math.abs(a_sq));
+                const b = Math.sqrt(Math.abs(b_sq));
+                const c = Math.sqrt(Math.abs(a_sq - b_sq));
+                
+                eccentricity = c / Math.max(a, b);
+                
+                // Calcular diretrizes para elipse
+                const ehHorizontal = a > b;
+                if (ehHorizontal) {
+                    directrix1 = { tipo: 'vertical', valor: centerX + a/eccentricity };
+                    directrix2 = { tipo: 'vertical', valor: centerX - a/eccentricity };
+                } else {
+                    directrix1 = { tipo: 'horizontal', valor: centerY + a/eccentricity };
+                    directrix2 = { tipo: 'horizontal', valor: centerY - a/eccentricity };
+                }
+                
+                // Aplicar rotação aos focos
+                if (a_sq > b_sq) {
+                    // Focos originais no eixo X
+                    const focus1_rotated = { x: centerX + c, y: centerY };
+                    const focus2_rotated = { x: centerX - c, y: centerY };
+                    
+                    // Aplicar rotação
+                    focus1 = {
+                        x: focus1_rotated.x * cos - focus1_rotated.y * sin,
+                        y: focus1_rotated.x * sin + focus1_rotated.y * cos
+                    };
+                    focus2 = {
+                        x: focus2_rotated.x * cos - focus2_rotated.y * sin,
+                        y: focus2_rotated.x * sin + focus2_rotated.y * cos
+                    };
+                } else {
+                    // Focos originais no eixo Y
+                    const focus1_rotated = { x: centerX, y: centerY + c };
+                    const focus2_rotated = { x: centerX, y: centerY - c };
+                    
+                    // Aplicar rotação
+                    focus1 = {
+                        x: focus1_rotated.x * cos - focus1_rotated.y * sin,
+                        y: focus1_rotated.x * sin + focus1_rotated.y * cos
+                    };
+                    focus2 = {
+                        x: focus2_rotated.x * cos - focus2_rotated.y * sin,
+                        y: focus2_rotated.x * sin + focus2_rotated.y * cos
+                    };
+                }
+            } else if (tipoConica === 'Hipérbole') {
+                // Para hipérbole
+                const a_sq = -F_prime / A_prime;
+                const b_sq = F_prime / C_prime;
+                const a = Math.sqrt(Math.abs(a_sq));
+                const b = Math.sqrt(Math.abs(b_sq));
+                const c = Math.sqrt(a_sq + b_sq);
+                
+                eccentricity = c / a;
+                
+                // Calcular diretrizes para hipérbole
+                directrix1 = { tipo: 'vertical', valor: centerX + a/eccentricity };
+                directrix2 = { tipo: 'vertical', valor: centerX - a/eccentricity };
+                
+                // Focos originais no eixo X
+                const focus1_rotated = { x: centerX + c, y: centerY };
+                const focus2_rotated = { x: centerX - c, y: centerY };
+                
+                // Aplicar rotação
+                focus1 = {
+                    x: focus1_rotated.x * cos - focus1_rotated.y * sin,
+                    y: focus1_rotated.x * sin + focus1_rotated.y * cos
+                };
+                focus2 = {
+                    x: focus2_rotated.x * cos - focus2_rotated.y * sin,
+                    y: focus2_rotated.x * sin + focus2_rotated.y * cos
+                };
+            }
+
+            conicaAtual = {
+                tipo: 'geral',
+                A, B, C, D, E, F: F_val,
+                tipoConica,
+                discriminante,
+                rotationAngle,
+                centro: { x: centerX, y: centerY },
+                foco1: focus1,
+                foco2: focus2,
+                diretriz1: directrix1,
+                diretriz2: directrix2,
+                eccentricity,
+                A_prime, C_prime, D_prime, E_prime, F_prime
+            };
+
+            const divResultado = document.getElementById('resultado');
+            divResultado.style.display = 'block';
+            
+            let resultadoHTML = `
+                <strong>EQUAÇÃO GERAL DA CÔNICA</strong><br><br>
+                <div class="formula">Equação: Ax² + Bxy + Cy² + Dx + Ey + F = 0</div>
+                <div class="formula">${A}x² + ${B}xy + ${C}y² + ${D}x + ${E}y + ${F_val} = 0</div><br>
+                
+                <strong>Classificação:</strong><br>
+                Discriminante: Δ = B² - 4AC = ${discriminante.toFixed(3)}<br>
+                <strong>Tipo: ${tipoConica}</strong><br><br>
+            `;
+            
+            if (B !== 0) {
+                resultadoHTML += `
+                    <strong>Transformação:</strong><br>
+                    Ângulo de rotação para eliminar Bxy: ${(rotationAngle * 180 / Math.PI).toFixed(2)}°<br><br>
+                `;
+            }
+            
+            resultadoHTML += `
+                <strong>Características:</strong><br>
+                Centro: (${centerX.toFixed(3)}, ${centerY.toFixed(3)})<br>
+            `;
+            
+            if (focus1) {
+                resultadoHTML += `Foco 1: (${focus1.x.toFixed(3)}, ${focus1.y.toFixed(3)})<br>`;
+            }
+            
+            if (focus2) {
+                resultadoHTML += `Foco 2: (${focus2.x.toFixed(3)}, ${focus2.y.toFixed(3)})<br>`;
+            }
+            
+            if (directrix1) {
+                if (tipoConica === 'Parábola') {
+                    resultadoHTML += `Diretriz: ${directrix1.tipo === 'horizontal' ? 'y' : 'x'} = ${directrix1.valor.toFixed(3)}<br>`;
+                } else {
+                    resultadoHTML += `Diretrizes: ${directrix1.tipo === 'horizontal' ? 'y' : 'x'} = ${directrix1.valor.toFixed(3)} e ${directrix2.tipo === 'horizontal' ? 'y' : 'x'} = ${directrix2.valor.toFixed(3)}<br>`;
+                }
+            }
+            
+            if (eccentricity) {
+                resultadoHTML += `<strong>Excentricidade: e = ${eccentricity.toFixed(6)}</strong><br>`;
+            }
+            
+            divResultado.innerHTML = resultadoHTML;
+
+            desenhar();
+        }
+
+        function desenhar() {
+            contexto.clearRect(0, 0, canvas.width, canvas.height);
+
+            const centroX = canvas.width / 2 + deslocamentoX;
+            const centroY = canvas.height / 2 + deslocamentoY;
+
+            // Desenhar grid
+            contexto.strokeStyle = '#2a2a2a';
+            contexto.lineWidth = 1;
+            contexto.fillStyle = '#666';
+            contexto.font = '10px Courier New';
+
+            for (let x = centroX % escala; x < canvas.width; x += escala) {
+                contexto.beginPath();
+                contexto.moveTo(x, 0);
+                contexto.lineTo(x, canvas.height);
+                contexto.stroke();
+                
+                const valorX = Math.round((x - centroX) / escala);
+                if (valorX !== 0) {
+                    contexto.fillText(valorX.toString(), x - 5, centroY + 15);
+                }
+            }
+
+            for (let y = centroY % escala; y < canvas.height; y += escala) {
+                contexto.beginPath();
+                contexto.moveTo(0, y);
+                contexto.lineTo(canvas.width, y);
+                contexto.stroke();
+                
+                const valorY = Math.round((centroY - y) / escala);
+                if (valorY !== 0) {
+                    contexto.fillText(valorY.toString(), centroX + 5, y + 3);
+                }
+            }
+
+            // Desenhar eixos
+            contexto.strokeStyle = '#444';
+            contexto.lineWidth = 2;
+            contexto.beginPath();
+            contexto.moveTo(0, centroY);
+            contexto.lineTo(canvas.width, centroY);
+            contexto.moveTo(centroX, 0);
+            contexto.lineTo(centroX, canvas.height);
+            contexto.stroke();
+            
+            contexto.fillStyle = '#64B5F6';
+            contexto.font = '13px Courier New';
+            contexto.fillText('X', canvas.width - 20, centroY - 10);
+            contexto.fillText('Y', centroX + 10, 20);
+
+            contexto.fillStyle = '#888';
+            contexto.fillText('0', centroX - 12, centroY + 15);
+
+            if (!conicaAtual) return;
+
+            // Desenhar cônica específica
+            if (conicaAtual.tipo === 'parabola') {
+                desenharParabola(centroX, centroY);
+            } else if (conicaAtual.tipo === 'elipse') {
+                desenharElipse(centroX, centroY);
+            } else if (conicaAtual.tipo === 'hiperbole') {
+                desenharHiperbole(centroX, centroY);
+            } else if (conicaAtual.tipo === 'geral') {
+                desenharGeral(centroX, centroY);
+            }
+
+            // Desenhar elementos do passo a passo
+            if (modoPassoAPasso) {
+                desenharPassoAPasso(centroX, centroY);
+            }
+        }
+
+        function desenharPassoAPasso(cx, cy) {
+            const tipo = document.getElementById('tipoConica').value;
+            
+            if (tipo === 'elipse') {
+                switch(passoAtual) {
+                    case 0: // Definir eixos
+                        contexto.fillStyle = '#FFD54F';
+                        contexto.font = '12px Courier New';
+                        contexto.fillText(`a = ${conicaAtual.a}, b = ${conicaAtual.b}`, cx + 10, cy - 10);
+                        contexto.fillText(`Centro = (${conicaAtual.h}, ${conicaAtual.k})`, cx + 10, cy + 20);
+                        
+                        // Desenhar eixos
+                        contexto.strokeStyle = '#FFD54F';
+                        contexto.setLineDash([5, 5]);
+                        contexto.beginPath();
+                        contexto.moveTo(cx + conicaAtual.A1.x * escala, cy - conicaAtual.A1.y * escala);
+                        contexto.lineTo(cx + conicaAtual.A2.x * escala, cy - conicaAtual.A2.y * escala);
+                        contexto.stroke();
+                        
+                        contexto.beginPath();
+                        contexto.moveTo(cx + conicaAtual.B2.x * escala, cy - conicaAtual.B2.y * escala);
+                        contexto.lineTo(cx + conicaAtual.B1.x * escala, cy - conicaAtual.B1.y * escala);
+                        contexto.stroke();
+                        contexto.setLineDash([]);
+                        break;
+                    case 1: // Cálculo gráfico dos focos
+                        desenharCalculoFocos(cx, cy);
+                        break;
+                    case 2: // Propriedade fundamental
+                        desenharPropriedadeFundamental(cx, cy);
+                        break;
+                    case 3: // Deduzir equação
+                        desenharDeducaoEquacao(cx, cy);
+                        break;
+                    case 4: // Verificar equação
+                        desenharVerificacaoEquacao(cx, cy);
+                        break;
+                }
+            } else if (tipo === 'geral') {
+                switch(passoAtual) {
+                    case 3: // Focos e rotação
+                        desenharFocosRotacao(cx, cy);
+                        break;
+                    case 4: // Visualização
+                        // Já está desenhado pela função desenharGeral
+                        infoSuperior.style.display = 'block';
+                        const angulo = conicaAtual.B !== 0 ? 0.5 * Math.atan(conicaAtual.B / (conicaAtual.A - conicaAtual.C)) * 180 / Math.PI : 0;
+                        infoSuperior.innerHTML = `
+                            <strong>Cônica na Forma Rotacionada</strong><br>
+                            ${conicaAtual.B !== 0 ? 
+                                `Termo Bxy = ${conicaAtual.B} causa rotação de ${angulo.toFixed(1)}°<br>Focos giram com a cônica` : 
+                                'Sem rotação (B = 0)'}
+                        `;
+                        break;
+                }
+            }
+        }
+
+        function desenharFocosRotacao(cx, cy) {
+            const { A, B, C, centro, foco1, foco2 } = conicaAtual;
+            
+            infoSuperior.style.display = 'block';
+            const angulo = B !== 0 ? 0.5 * Math.atan(B / (A - C)) * 180 / Math.PI : 0;
+            infoSuperior.innerHTML = `
+                <strong>Cálculo dos Focos e Rotação</strong><br>
+                Ângulo de rotação: θ = ½ arctan(B/(A-C)) = ${angulo.toFixed(1)}°<br>
+                Foco 1: (${foco1.x.toFixed(2)}, ${foco1.y.toFixed(2)})<br>
+                Foco 2: (${foco2.x.toFixed(2)}, ${foco2.y.toFixed(2)})<br>
+                Quando B ≠ 0, os focos giram com a cônica
+            `;
+
+            // Desenhar eixos rotacionados
+            if (B !== 0) {
+                const anguloRad = 0.5 * Math.atan(B / (A - C));
+                const comprimento = 200;
+                
+                contexto.strokeStyle = '#FF5252';
+                contexto.setLineDash([5, 3]);
+                contexto.lineWidth = 1;
+                
+                // Eixo x' rotacionado
+                contexto.beginPath();
+                contexto.moveTo(
+                    cx + centro.x * escala - comprimento * Math.cos(anguloRad), 
+                    cy - centro.y * escala + comprimento * Math.sin(anguloRad)
+                );
+                contexto.lineTo(
+                    cx + centro.x * escala + comprimento * Math.cos(anguloRad), 
+                    cy - centro.y * escala - comprimento * Math.sin(anguloRad)
+                );
+                contexto.stroke();
+                
+                // Eixo y' rotacionado
+                contexto.beginPath();
+                contexto.moveTo(
+                    cx + centro.x * escala - comprimento * Math.sin(anguloRad), 
+                    cy - centro.y * escala - comprimento * Math.cos(anguloRad)
+                );
+                contexto.lineTo(
+                    cx + centro.x * escala + comprimento * Math.sin(anguloRad), 
+                    cy - centro.y * escala + comprimento * Math.cos(anguloRad)
+                );
+                contexto.stroke();
+                
+                contexto.setLineDash([]);
+                
+                contexto.fillStyle = '#FF5252';
+                contexto.font = '11px Courier New';
+                contexto.fillText('x\'', 
+                    cx + centro.x * escala + comprimento * Math.cos(anguloRad) + 5, 
+                    cy - centro.y * escala - comprimento * Math.sin(anguloRad) - 5
+                );
+                contexto.fillText('y\'', 
+                    cx + centro.x * escala + comprimento * Math.sin(anguloRad) + 5, 
+                    cy - centro.y * escala + comprimento * Math.cos(anguloRad) - 5
+                );
+            }
+        }
+
+        function desenharCalculoFocos(cx, cy) {
+            const { a, b, h, k, c, foco1, foco2, B1 } = conicaAtual;
+            
+            // MOSTRAR INFORMAÇÃO NO TOPO
+            infoSuperior.style.display = 'block';
+            infoSuperior.innerHTML = `
+                <strong>Cálculo Gráfico da Posição dos Focos</strong><br>
+                Usando o triângulo retângulo C → B₁ → F₁<br>
+                c = √(a² - b²) = √(${a}² - ${b}²) = √${a*a - b*b} = ${c.toFixed(3)}<br>
+                F₁ = (h + c, k) = (${c.toFixed(3)}, 0) | F₂ = (h - c, k) = (-${c.toFixed(3)}, 0)
+            `;
+
+            // Desenhar triângulo C-B1-F1
+            contexto.strokeStyle = '#FFD54F';
+            contexto.lineWidth = 2;
+            contexto.beginPath();
+            
+            const Cx = cx + h * escala;
+            const Cy = cy - k * escala;
+            const B1x = cx + B1.x * escala;
+            const B1y = cy - B1.y * escala;
+            const F1x = cx + foco1.x * escala;
+            const F1y = cy - foco1.y * escala;
+            
+            contexto.moveTo(Cx, Cy);
+            contexto.lineTo(B1x, B1y);
+            contexto.lineTo(F1x, F1y);
+            contexto.lineTo(Cx, Cy);
+            contexto.stroke();
+            
+            // Desenhar ângulo reto em B1
+            contexto.strokeStyle = '#FF5252';
+            contexto.lineWidth = 1;
+            const anguloSize = 8;
+            contexto.beginPath();
+            contexto.moveTo(B1x - anguloSize, B1y);
+            contexto.lineTo(B1x - anguloSize, B1y - anguloSize);
+            contexto.lineTo(B1x, B1y - anguloSize);
+            contexto.stroke();
+            
+            // Medidas do triângulo
+            contexto.fillStyle = '#FFD54F';
+            contexto.font = '11px Courier New';
+            contexto.fillText(`b = ${b}`, (Cx + B1x) / 2, (Cy + B1y) / 2 + 15);
+            contexto.fillText(`c = ${c.toFixed(2)}`, (Cx + F1x) / 2, (Cy + F1y) / 2 - 10);
+            contexto.fillText(`a = ${a}`, (B1x + F1x) / 2, (B1y + F1y) / 2);
+            
+            // Rótulos dos pontos
+            contexto.fillText('C', Cx - 15, Cy + 15);
+            contexto.fillText('B₁', B1x - 15, B1y - 8);
+            contexto.fillText('F₁', F1x + 8, F1y - 8);
+            
+            // Desenhar focos
+            contexto.fillStyle = '#FF5252';
+            contexto.beginPath();
+            contexto.arc(F1x, F1y, 6, 0, 2 * Math.PI);
+            contexto.fill();
+            contexto.beginPath();
+            contexto.arc(cx + foco2.x * escala, cy - foco2.y * escala, 6, 0, 2 * Math.PI);
+            contexto.fill();
+            
+            contexto.fillStyle = '#FFD54F';
+            contexto.fillText('F₂', cx + foco2.x * escala + 8, cy - foco2.y * escala - 8);
+        }
+
+        function desenharPropriedadeFundamental(cx, cy) {
+            const { a, foco1, foco2, p1, p2, B1 } = conicaAtual;
+            
+            // Usar pontos P1, P2 e B1
+            const pontos = [
+                { x: p1.x, y: p1.y, nome: 'P₁' },
+                { x: p2.x, y: p2.y, nome: 'P₂' },
+                { x: B1.x, y: B1.y, nome: 'B₁' }
+            ];
+
+            // MOSTRAR INFORMAÇÃO NO TOPO
+            infoSuperior.style.display = 'block';
+            infoSuperior.innerHTML = `
+                <strong>Propriedade Fundamental da Elipse</strong><br>
+                PF₁ + PF₂ = 2a = ${(2*a).toFixed(1)} (constante)<br>
+                d(P₁F₁) + d(P₁F₂) = d(P₂F₁) + d(P₂F₂) = d(B₁F₁) + d(B₁F₂) = 2a
+            `;
+
+            // Desenhar ligações para todos os pontos
+            pontos.forEach((ponto) => {
+                const dist1 = Math.sqrt((ponto.x - foco1.x) ** 2 + (ponto.y - foco1.y) ** 2);
+                const dist2 = Math.sqrt((ponto.x - foco2.x) ** 2 + (ponto.y - foco2.y) ** 2);
+
+                // Desenhar ponto
+                contexto.fillStyle = '#4CAF50';
+                contexto.beginPath();
+                contexto.arc(cx + ponto.x * escala, cy - ponto.y * escala, 4, 0, 2 * Math.PI);
+                contexto.fill();
+
+                // Desenhar linhas para os focos
+                contexto.strokeStyle = '#4CAF50';
+                contexto.setLineDash([2, 2]);
+                contexto.beginPath();
+                contexto.moveTo(cx + ponto.x * escala, cy - ponto.y * escala);
+                contexto.lineTo(cx + foco1.x * escala, cy - foco1.y * escala);
+                contexto.stroke();
+                
+                contexto.beginPath();
+                contexto.moveTo(cx + ponto.x * escala, cy - ponto.y * escala);
+                contexto.lineTo(cx + foco2.x * escala, cy - foco2.y * escala);
+                contexto.stroke();
+                contexto.setLineDash([]);
+            });
+        }
+
+        function desenharDeducaoEquacao(cx, cy) {
+            const { a, b, h, k } = conicaAtual;
+            
+            // MOSTRAR INFORMAÇÃO NO TOPO
+            infoSuperior.style.display = 'block';
+            infoSuperior.innerHTML = `
+                <strong>Dedução da Equação da Elipse</strong><br>
+                1. PF₁ + PF₂ = 2a<br>
+                2. √[(x-c)²+y²] + √[(x+c)²+y²] = 2a<br>
+                3. Chegamos em: (x-${h})²/${a}² + (y-${k})²/${b}² = 1
+            `;
+        }
+
+        function desenharVerificacaoEquacao(cx, cy) {
+            const { a, b, h, k, p1, p2, B1 } = conicaAtual;
+            
+            // Pontos EXATAMENTE na curva
+            const pontosTeste = [
+                { x: h + a, y: k, nome: 'A₂' },
+                { x: h, y: k + b, nome: 'B₁' },
+                { x: p1.x, y: p1.y, nome: 'P₁' },
+                { x: p2.x, y: p2.y, nome: 'P₂' }
+            ];
+
+            // MOSTRAR INFORMAÇÃO NO TOPO
+            let infoTexto = '<strong>Verificação da Equação</strong><br>';
+            pontosTeste.forEach((ponto, index) => {
+                const valor = ((ponto.x - h) ** 2) / (a ** 2) + ((ponto.y - k) ** 2) / (b ** 2);
+                const naElipse = Math.abs(valor - 1) < 0.01;
+                infoTexto += `${ponto.nome}: ${valor.toFixed(3)} ${naElipse ? '✓' : '✗'}`;
+                if (index < pontosTeste.length - 1) infoTexto += ' | ';
+            });
+            
+            infoSuperior.style.display = 'block';
+            infoSuperior.innerHTML = infoTexto;
+        }
+
+        function desenharParabola(cx, cy) {
+            const { p, h, k, foco, diretriz } = conicaAtual;
+
+            contexto.strokeStyle = '#4CAF50';
+            contexto.lineWidth = 2;
+            contexto.beginPath();
+            for (let x = -20; x <= 20; x += 0.1) {
+                const y = ((x - h) ** 2) / (4 * p) + k;
+                const telaX = cx + x * escala;
+                const telaY = cy - y * escala;
+                if (x === -20) {
+                    contexto.moveTo(telaX, telaY);
+                } else {
+                    contexto.lineTo(telaX, telaY);
+                }
+            }
+            contexto.stroke();
+
+            contexto.fillStyle = '#FF5252';
+            contexto.beginPath();
+            contexto.arc(cx + foco.x * escala, cy - foco.y * escala, 5, 0, 2 * Math.PI);
+            contexto.fill();
+
+            contexto.strokeStyle = '#64B5F6';
+            contexto.lineWidth = 2;
+            contexto.setLineDash([5, 5]);
+            contexto.beginPath();
+            contexto.moveTo(0, cy - diretriz * escala);
+            contexto.lineTo(canvas.width, cy - diretriz * escala);
+            contexto.stroke();
+            contexto.setLineDash([]);
+        }
+
+        function desenharElipse(cx, cy) {
+            const { a, b, h, k, foco1, foco2, A1, A2, B1, B2, p1, p2, diretriz1, diretriz2 } = conicaAtual;
+
+            // Desenhar elipse
+            contexto.strokeStyle = '#4CAF50';
+            contexto.lineWidth = 2;
+            contexto.beginPath();
+            contexto.ellipse(cx + h * escala, cy - k * escala, a * escala, b * escala, 0, 0, 2 * Math.PI);
+            contexto.stroke();
+
+            // Desenhar focos (sempre)
+            contexto.fillStyle = '#FF5252';
+            contexto.beginPath();
+            contexto.arc(cx + foco1.x * escala, cy - foco1.y * escala, 5, 0, 2 * Math.PI);
+            contexto.fill();
+            contexto.beginPath();
+            contexto.arc(cx + foco2.x * escala, cy - foco2.y * escala, 5, 0, 2 * Math.PI);
+            contexto.fill();
+
+            // Desenhar diretrizes
+            contexto.strokeStyle = '#64B5F6';
+            contexto.lineWidth = 1;
+            contexto.setLineDash([5, 5]);
+            
+            if (diretriz1.tipo === 'vertical') {
+                contexto.beginPath();
+                contexto.moveTo(cx + diretriz1.valor * escala, 0);
+                contexto.lineTo(cx + diretriz1.valor * escala, canvas.height);
+                contexto.stroke();
+                
+                contexto.beginPath();
+                contexto.moveTo(cx + diretriz2.valor * escala, 0);
+                contexto.lineTo(cx + diretriz2.valor * escala, canvas.height);
+                contexto.stroke();
+            } else {
+                contexto.beginPath();
+                contexto.moveTo(0, cy - diretriz1.valor * escala);
+                contexto.lineTo(canvas.width, cy - diretriz1.valor * escala);
+                contexto.stroke();
+                
+                contexto.beginPath();
+                contexto.moveTo(0, cy - diretriz2.valor * escala);
+                contexto.lineTo(canvas.width, cy - diretriz2.valor * escala);
+                contexto.stroke();
+            }
+            contexto.setLineDash([]);
+
+            // NÃO desenhar pontos se estiver no passo 1 (Cálculo dos focos)
+            if (modoPassoAPasso && passoAtual === 1) {
+                return;
+            }
+
+            // Desenhar vértices e pontos dos eixos (apenas se NÃO for passo 1)
+            contexto.fillStyle = '#FFD54F';
+            contexto.font = '11px Courier New';
+            
+            // Vértices A1 e A2
+            contexto.beginPath();
+            contexto.arc(cx + A1.x * escala, cy - A1.y * escala, 4, 0, 2 * Math.PI);
+            contexto.fill();
+            contexto.fillText('A₁', cx + A1.x * escala - 12, cy - A1.y * escala - 8);
+            
+            contexto.beginPath();
+            contexto.arc(cx + A2.x * escala, cy - A2.y * escala, 4, 0, 2 * Math.PI);
+            contexto.fill();
+            contexto.fillText('A₂', cx + A2.x * escala + 8, cy - A2.y * escala - 8);
+            
+            // Pontos B1 e B2
+            contexto.beginPath();
+            contexto.arc(cx + B1.x * escala, cy - B1.y * escala, 4, 0, 2 * Math.PI);
+            contexto.fill();
+            contexto.fillText('B₁', cx + B1.x * escala + 8, cy - B1.y * escala - 8);
+            
+            contexto.beginPath();
+            contexto.arc(cx + B2.x * escala, cy - B2.y * escala, 4, 0, 2 * Math.PI);
+            contexto.fill();
+            contexto.fillText('B₂', cx + B2.x * escala + 8, cy - B2.y * escala + 15);
+            
+            // Pontos P1 e P2
+            contexto.beginPath();
+            contexto.arc(cx + p1.x * escala, cy - p1.y * escala, 4, 0, 2 * Math.PI);
+            contexto.fill();
+            contexto.fillText('P₁', cx + p1.x * escala + 8, cy - p1.y * escala - 8);
+            
+            contexto.beginPath();
+            contexto.arc(cx + p2.x * escala, cy - p2.y * escala, 4, 0, 2 * Math.PI);
+            contexto.fill();
+            contexto.fillText('P₂', cx + p2.x * escala + 8, cy - p2.y * escala - 8);
+            
+            // Centro
+            contexto.fillStyle = '#64B5F6';
+            contexto.beginPath();
+            contexto.arc(cx + h * escala, cy - k * escala, 3, 0, 2 * Math.PI);
+            contexto.fill();
+            contexto.fillText('C', cx + h * escala - 12, cy - k * escala + 15);
+        }
+
+        function desenharHiperbole(cx, cy) {
+            const { a, b, h, k, foco1, foco2, diretriz1, diretriz2 } = conicaAtual;
+
+            contexto.strokeStyle = '#4CAF50';
+            contexto.lineWidth = 2;
+            
+            // Ramo direito
+            contexto.beginPath();
+            for (let x = a; x <= 20; x += 0.1) {
+                const y = Math.sqrt(b * b * (x * x / (a * a) - 1));
+                contexto.lineTo(cx + (h + x) * escala, cy - (k + y) * escala);
+            }
+            contexto.stroke();
+            
+            contexto.beginPath();
+            for (let x = a; x <= 20; x += 0.1) {
+                const y = Math.sqrt(b * b * (x * x / (a * a) - 1));
+                contexto.lineTo(cx + (h + x) * escala, cy - (k - y) * escala);
+            }
+            contexto.stroke();
+
+            // Ramo esquerdo
+            contexto.beginPath();
+            for (let x = a; x <= 20; x += 0.1) {
+                const y = Math.sqrt(b * b * (x * x / (a * a) - 1));
+                contexto.lineTo(cx + (h - x) * escala, cy - (k + y) * escala);
+            }
+            contexto.stroke();
+            
+            contexto.beginPath();
+            for (let x = a; x <= 20; x += 0.1) {
+                const y = Math.sqrt(b * b * (x * x / (a * a) - 1));
+                contexto.lineTo(cx + (h - x) * escala, cy - (k - y) * escala);
+            }
+            contexto.stroke();
+
+            contexto.fillStyle = '#FF5252';
+            contexto.beginPath();
+            contexto.arc(cx + foco1.x * escala, cy - foco1.y * escala, 5, 0, 2 * Math.PI);
+            contexto.fill();
+            contexto.beginPath();
+            contexto.arc(cx + foco2.x * escala, cy - foco2.y * escala, 5, 0, 2 * Math.PI);
+            contexto.fill();
+
+            // Desenhar diretrizes
+            contexto.strokeStyle = '#64B5F6';
+            contexto.lineWidth = 1;
+            contexto.setLineDash([5, 5]);
+            
+            contexto.beginPath();
+            contexto.moveTo(cx + diretriz1.valor * escala, 0);
+            contexto.lineTo(cx + diretriz1.valor * escala, canvas.height);
+            contexto.stroke();
+            
+            contexto.beginPath();
+            contexto.moveTo(cx + diretriz2.valor * escala, 0);
+            contexto.lineTo(cx + diretriz2.valor * escala, canvas.height);
+            contexto.stroke();
+            
+            contexto.setLineDash([]);
+
+            // Desenhar vértices
+            contexto.fillStyle = '#FFD54F';
+            contexto.beginPath();
+            contexto.arc(cx + (h + a) * escala, cy - k * escala, 4, 0, 2 * Math.PI);
+            contexto.fill();
+            contexto.beginPath();
+            contexto.arc(cx + (h - a) * escala, cy - k * escala, 4, 0, 2 * Math.PI);
+            contexto.fill();
+        }
+
+    function desenharGeral(cx, cy) {
+    const { A, B, C, D, E, F, tipoConica, centro, foco1, foco2, rotationAngle, diretriz1, diretriz2, A_prime, C_prime, D_prime, E_prime, F_prime } = conicaAtual;
+
+    contexto.strokeStyle = '#4CAF50';
+    contexto.lineWidth = 2;
+    contexto.beginPath();
+
+    // Use parametric approach for better rendering
+    if (tipoConica === 'Elipse' || tipoConica === 'Círculo') {
+        // For ellipse/circle, use parametric equation
+        const a_sq = -F_prime / A_prime;
+        const b_sq = -F_prime / C_prime;
+        const a = Math.sqrt(Math.abs(a_sq));
+        const b = Math.sqrt(Math.abs(b_sq));
+        
+        let firstPoint = true;
+        for (let t = 0; t <= 2 * Math.PI + 0.1; t += 0.05) {
+            // Parametric coordinates in rotated system
+            const x_rot = a * Math.cos(t);
+            const y_rot = b * Math.sin(t);
+            
+            // Aplicar rotação no sentido correto
+            const x = x_rot * Math.cos(rotationAngle) - y_rot * Math.sin(rotationAngle);
+            const y = x_rot * Math.sin(rotationAngle) + y_rot * Math.cos(rotationAngle);
+            
+            // Translate to center
+            const finalX = x + centro.x;
+            const finalY = y + centro.y;
+            
+            const screenX = cx + finalX * escala;
+            const screenY = cy - finalY * escala;
+            
+            if (firstPoint) {
+                contexto.moveTo(screenX, screenY);
+                firstPoint = false;
+            } else {
+                contexto.lineTo(screenX, screenY);
+            }
+        }
+        // Fechar a elipse conectando o último ponto ao primeiro
+        const x_rot = a * Math.cos(0);
+        const y_rot = b * Math.sin(0);
+        const x = x_rot * Math.cos(rotationAngle) - y_rot * Math.sin(rotationAngle);
+        const y = x_rot * Math.sin(rotationAngle) + y_rot * Math.cos(rotationAngle);
+        const finalX = x + centro.x;
+        const finalY = y + centro.y;
+        const screenX = cx + finalX * escala;
+        const screenY = cy - finalY * escala;
+        contexto.lineTo(screenX, screenY);
+    } else if (tipoConica === 'Hipérbole') {
+        // For hyperbola, draw both branches
+        const a_sq = -F_prime / A_prime;
+        const b_sq = F_prime / C_prime;
+        const a = Math.sqrt(Math.abs(a_sq));
+        const b = Math.sqrt(Math.abs(b_sq));
+        
+        // Right branch
+        let firstPoint = true;
+        for (let t = -3; t <= 3; t += 0.1) {
+            const x_rot = a * Math.cosh(t);
+            const y_rot = b * Math.sinh(t);
+            
+            // Aplicar rotação no sentido correto
+            const x = x_rot * Math.cos(rotationAngle) - y_rot * Math.sin(rotationAngle);
+            const y = x_rot * Math.sin(rotationAngle) + y_rot * Math.cos(rotationAngle);
+            
+            // Translate to center
+            const finalX = x + centro.x;
+            const finalY = y + centro.y;
+            
+            const screenX = cx + finalX * escala;
+            const screenY = cy - finalY * escala;
+            
+            if (firstPoint) {
+                contexto.moveTo(screenX, screenY);
+                firstPoint = false;
+            } else {
+                contexto.lineTo(screenX, screenY);
+            }
         }
         
-        superficie = {
-          x: x_pontos,
-          y: y_pontos,
-          z: z_pontos,
-          mode: 'markers',
-          type: 'scatter3d',
-          marker: {
-            size: 2,
-            color: '#00ffff',
-            opacity: 0.9
-          },
-          name: 'Pontos'
-        };
-      }
-      
-      criarEixos3D([superficie]);
-    }
-    
-    function criarSuperficieHiperbole3D(x, y, z_pos, z_neg, escalaCores) {
-      let superficie_pos, superficie_neg;
-      
-      if (renderizacaoAtual === 'surface') {
-        superficie_pos = {
-          x: x,
-          y: y, 
-          z: z_pos,
-          type: 'surface',
-          colorscale: escalaCores,
-          opacity: 0.9,
-          showscale: false,
-          name: 'Superfície +Z'
-        };
-        
-        superficie_neg = {
-          x: x,
-          y: y, 
-          z: z_neg,
-          type: 'surface',
-          colorscale: escalaCores,
-          opacity: 0.9,
-          showscale: false,
-          name: 'Superfície -Z'
-        };
-        
-        criarEixos3D([superficie_pos, superficie_neg]);
-      } else {
-        const x_pontos = [], y_pontos = [], z_pontos = [];
-        for (let i = 0; i < y.length; i++) {
-          for (let j = 0; j < x.length; j++) {
-            if (z_pos[i][j] !== 0) {
-              x_pontos.push(x[j]);
-              y_pontos.push(y[i]);
-              z_pontos.push(z_pos[i][j]);
-              x_pontos.push(x[j]);
-              y_pontos.push(y[i]);
-              z_pontos.push(z_neg[i][j]);
+        // Left branch
+        contexto.beginPath();
+        firstPoint = true;
+        for (let t = -3; t <= 3; t += 0.1) {
+            const x_rot = -a * Math.cosh(t);
+            const y_rot = b * Math.sinh(t);
+            
+            // Aplicar rotação no sentido correto
+            const x = x_rot * Math.cos(rotationAngle) - y_rot * Math.sin(rotationAngle);
+            const y = x_rot * Math.sin(rotationAngle) + y_rot * Math.cos(rotationAngle);
+            
+            // Translate to center
+            const finalX = x + centro.x;
+            const finalY = y + centro.y;
+            
+            const screenX = cx + finalX * escala;
+            const screenY = cy - finalY * escala;
+            
+            if (firstPoint) {
+                contexto.moveTo(screenX, screenY);
+                firstPoint = false;
+            } else {
+                contexto.lineTo(screenX, screenY);
             }
-          }
         }
+    } else if (tipoConica === 'Parábola') {
+        // For parabola, use standard form
+        const p = 1 / (4 * A_prime);
         
-        const pontos = {
-          x: x_pontos,
-          y: y_pontos,
-          z: z_pontos,
-          mode: 'markers',
-          type: 'scatter3d',
-          marker: {
-            size: 2,
-            color: '#00ffff',
-            opacity: 0.8
-          },
-          name: 'Pontos'
-        };
-        
-        criarEixos3D([pontos]);
-      }
-    }
-    
-    function criarSuperficieElipsoide3D(x, y, z, escalaCores) {
-      let superficie;
-      
-      if (renderizacaoAtual === 'surface') {
-        superficie = {
-          x: x,
-          y: y, 
-          z: z,
-          type: 'surface',
-          colorscale: escalaCores,
-          opacity: 0.95,
-          showscale: false,
-          name: 'Elipsoide',
-          lighting: {
-            diffuse: 0.8,
-            specular: 0.1
-          }
-        };
-      } else {
-        const x_pontos = [], y_pontos = [], z_pontos = [];
-        for (let i = 0; i < y.length; i++) {
-          for (let j = 0; j < x[i].length; j++) {
-            x_pontos.push(x[i][j]);
-            y_pontos.push(y[i][j]);
-            z_pontos.push(z[i][j]);
-          }
-        }
-        
-        superficie = {
-          x: x_pontos,
-          y: y_pontos,
-          z: z_pontos,
-          mode: 'markers',
-          type: 'scatter3d',
-          marker: {
-            size: 2,
-            color: '#00ffff',
-            opacity: 0.8
-          },
-          name: 'Pontos'
-        };
-      }
-      
-      criarEixos3D([superficie]);
-    }
-    
-    function criarEixos3D(superficies) {
-      let elementos = [...superficies];
-      
-      let a, b;
-      
-      switch(curvaAtual) {
-        case 'parabola':
-          a = parseFloat(document.getElementById('parabola-a').value);
-          
-          elementos.push({
-            x: [0], y: [0], z: [a],
-            mode: 'markers',
-            type: 'scatter3d',
-            marker: {
-              color: 'red',
-              size: 8,
-              symbol: 'circle'
-            },
-            name: 'Foco'
-          });
-          
-          const pontos_diretriz = [];
-          for (let i = -4; i <= 4; i += 0.5) {
-            for (let j = -4; j <= 4; j += 0.5) {
-              pontos_diretriz.push({
-                x: i, y: j, z: -a
-              });
+        let firstPoint = true;
+        for (let x_rot = -10; x_rot <= 10; x_rot += 0.1) {
+            const y_rot = (x_rot * x_rot) / (4 * p);
+            
+            // Aplicar rotação no sentido correto
+            const x = x_rot * Math.cos(rotationAngle) - y_rot * Math.sin(rotationAngle);
+            const y = x_rot * Math.sin(rotationAngle) + y_rot * Math.cos(rotationAngle);
+            
+            // Translate to center
+            const finalX = x + centro.x;
+            const finalY = y + centro.y;
+            
+            const screenX = cx + finalX * escala;
+            const screenY = cy - finalY * escala;
+            
+            if (firstPoint) {
+                contexto.moveTo(screenX, screenY);
+                firstPoint = false;
+            } else {
+                contexto.lineTo(screenX, screenY);
             }
-          }
-          
-          elementos.push({
-            x: pontos_diretriz.map(p => p.x),
-            y: pontos_diretriz.map(p => p.y),
-            z: pontos_diretriz.map(p => p.z),
-            mode: 'markers',
-            type: 'scatter3d',
-            marker: {
-              color: 'yellow',
-              size: 2,
-              opacity: 0.3
-            },
-            name: 'Diretriz'
-          });
-          break;
-          
-        case 'hiperbole':
-          a = parseFloat(document.getElementById('hiperbole-a').value);
-          b = parseFloat(document.getElementById('hiperbole-b').value);
-          const c_hiperbole = Math.sqrt(a*a + b*b);
-          
-          elementos.push({
-            x: [c_hiperbole, -c_hiperbole],
-            y: [0, 0],
-            z: [0, 0],
-            mode: 'markers',
-            type: 'scatter3d',
-            marker: {
-              color: 'red',
-              size: 8,
-              symbol: 'circle'
-            },
-            name: 'Focos'
-          });
-          
-          elementos.push({
-            x: [0], y: [0], z: [0],
-            mode: 'markers',
-            type: 'scatter3d',
-            marker: {
-              color: 'cyan',
-              size: 6,
-              symbol: 'diamond'
-            },
-            name: 'Centro'
-          });
-          break;
-          
-        case 'elipse':
-          a = parseFloat(document.getElementById('elipse-a').value);
-          b = parseFloat(document.getElementById('elipse-b').value);
-          const c_elipse = Math.sqrt(Math.abs(a*a - b*b));
-          
-          elementos.push({
-            x: [c_elipse, -c_elipse],
-            y: [0, 0],
-            z: [0, 0],
-            mode: 'markers',
-            type: 'scatter3d',
-            marker: {
-              color: 'red',
-              size: 8,
-              symbol: 'circle'
-            },
-            name: 'Focos'
-          });
-          
-          elementos.push({
-            x: [0], y: [0], z: [0],
-            mode: 'markers',
-            type: 'scatter3d',
-            marker: {
-              color: 'cyan',
-              size: 6,
-              symbol: 'diamond'
-            },
-            name: 'Centro'
-          });
-          break;
-      }
-      
-      const eixo_x = {
-        x: [-6, 6], y: [0, 0], z: [0, 0],
-        mode: 'lines', type: 'scatter3d',
-        line: { color: '#ff4444', width: 4 },
-        name: 'Eixo X (Abcissa)'
-      };
-      
-      const eixo_y = {
-        x: [0, 0], y: [-6, 6], z: [0, 0],
-        mode: 'lines', type: 'scatter3d',
-        line: { color: '#44ff44', width: 4 },
-        name: 'Eixo Y (Ordenada)'
-      };
-      
-      const eixo_z = {
-        x: [0, 0], y: [0, 0], z: [-6, 6],
-        mode: 'lines', type: 'scatter3d',
-        line: { color: '#4444ff', width: 4 },
-        name: 'Eixo Z (Cota)'
-      };
-      
-      elementos.push(eixo_x, eixo_y, eixo_z);
-      
-      const layout = {
-        scene: {
-          xaxis: { 
-            title: 'X (Abcissa) ←→', 
-            gridcolor: '#666', 
-            gridwidth: 1,
-            range: [-6, 6],
-            backgroundcolor: '#000',
-            color: '#ff4444',
-            titlefont: { color: '#ff4444' }
-          },
-          yaxis: { 
-            title: 'Y (Ordenada) ↑↓', 
-            gridcolor: '#666', 
-            gridwidth: 1,
-            range: [-6, 6],
-            backgroundcolor: '#000',
-            color: '#44ff44',
-            titlefont: { color: '#44ff44' }
-          },
-          zaxis: { 
-            title: 'Z (Cota) ↕', 
-            gridcolor: '#666', 
-            gridwidth: 1,
-            range: [-6, 6],
-            backgroundcolor: '#000',
-            color: '#4444ff',
-            titlefont: { color: '#4444ff' }
-          },
-          aspectratio: { x: 1, y: 1, z: 1 },
-          bgcolor: '#000',
-          camera: {
-            eye: { x: 1.8, y: 1.8, z: 1.8 }
-          }
-        },
-        margin: { t: 40, l: 0, r: 0, b: 0 },
-        paper_bgcolor: '#000',
-        plot_bgcolor: '#000',
-        showlegend: true,
-        legend: {
-          bgcolor: 'rgba(0,0,0,0.8)',
-          font: { color: 'white' },
-          x: 0,
-          y: 1
         }
-      };
-      
-      Plotly.newPlot('grafico', elementos, layout);
     }
     
-    function criarPlot2D() {
-      const passo = 0.05;
-      let elementos = [];
-      
-      let a, b;
-      
-      switch(curvaAtual) {
-        case 'parabola':
-          a = parseFloat(document.getElementById('parabola-a').value);
-          let x_parabola = [], y_parabola = [];
-          for (let i = -6; i <= 6; i += passo) {
-            x_parabola.push(i);
-            y_parabola.push((i * i) / (4 * a));
-          }
-          
-          elementos.push({
-            x: x_parabola,
-            y: y_parabola,
-            mode: 'lines',
-            type: 'scatter',
-            line: { 
-              color: '#00ffff', 
-              width: 3,
-              shape: 'spline'
-            },
-            name: 'Parábola',
-            showlegend: false
-          });
-          break;
-          
-        case 'hiperbole':
-          a = parseFloat(document.getElementById('hiperbole-a').value);
-          b = parseFloat(document.getElementById('hiperbole-b').value);
-          
-          // Ramo direito (superior)
-          let x_hiperbole_dir_sup = [], y_hiperbole_dir_sup = [];
-          for (let i = a; i <= 6; i += passo) {
-            const y_val = Math.sqrt((i * i) / (a * a) - 1) * b;
-            x_hiperbole_dir_sup.push(i);
-            y_hiperbole_dir_sup.push(y_val);
-          }
-          
-          // Ramo direito (inferior)
-          let x_hiperbole_dir_inf = [], y_hiperbole_dir_inf = [];
-          for (let i = 6; i >= a; i -= passo) {
-            const y_val = -Math.sqrt((i * i) / (a * a) - 1) * b;
-            x_hiperbole_dir_inf.push(i);
-            y_hiperbole_dir_inf.push(y_val);
-          }
-          
-          // Ramo esquerdo (superior)
-          let x_hiperbole_esq_sup = [], y_hiperbole_esq_sup = [];
-          for (let i = -a; i >= -6; i -= passo) {
-            const y_val = Math.sqrt((i * i) / (a * a) - 1) * b;
-            x_hiperbole_esq_sup.push(i);
-            y_hiperbole_esq_sup.push(y_val);
-          }
-          
-          // Ramo esquerdo (inferior)
-          let x_hiperbole_esq_inf = [], y_hiperbole_esq_inf = [];
-          for (let i = -6; i <= -a; i += passo) {
-            const y_val = -Math.sqrt((i * i) / (a * a) - 1) * b;
-            x_hiperbole_esq_inf.push(i);
-            y_hiperbole_esq_inf.push(y_val);
-          }
-          
-          // Adicionar os 4 ramos separadamente (sem fechar)
-          elementos.push({
-            x: x_hiperbole_dir_sup,
-            y: y_hiperbole_dir_sup,
-            mode: 'lines',
-            type: 'scatter',
-            line: { 
-              color: '#00ffff', 
-              width: 3
-            },
-            name: 'Hipérbole - Ramo Direito Superior',
-            showlegend: false
-          });
-          
-          elementos.push({
-            x: x_hiperbole_dir_inf,
-            y: y_hiperbole_dir_inf,
-            mode: 'lines',
-            type: 'scatter',
-            line: { 
-              color: '#00ffff', 
-              width: 3
-            },
-            name: 'Hipérbole - Ramo Direito Inferior',
-            showlegend: false
-          });
-          
-          elementos.push({
-            x: x_hiperbole_esq_sup,
-            y: y_hiperbole_esq_sup,
-            mode: 'lines',
-            type: 'scatter',
-            line: { 
-              color: '#00ffff', 
-              width: 3
-            },
-            name: 'Hipérbole - Ramo Esquerdo Superior',
-            showlegend: false
-          });
-          
-          elementos.push({
-            x: x_hiperbole_esq_inf,
-            y: y_hiperbole_esq_inf,
-            mode: 'lines',
-            type: 'scatter',
-            line: { 
-              color: '#00ffff', 
-              width: 3
-            },
-            name: 'Hipérbole - Ramo Esquerdo Inferior',
-            showlegend: false
-          });
-          break;
-          
-        case 'elipse':
-          a = parseFloat(document.getElementById('elipse-a').value);
-          b = parseFloat(document.getElementById('elipse-b').value);
-          let x_elipse = [], y_elipse = [];
-          
-          // Elipse completa e fechada
-          for (let angulo = 0; angulo <= 2 * Math.PI; angulo += passo) {
-            x_elipse.push(a * Math.cos(angulo));
-            y_elipse.push(b * Math.sin(angulo));
-          }
-          // Fechar a elipse
-          x_elipse.push(a * Math.cos(0));
-          y_elipse.push(b * Math.sin(0));
-          
-          elementos.push({
-            x: x_elipse,
-            y: y_elipse,
-            mode: 'lines',
-            type: 'scatter',
-            line: { 
-              color: '#00ffff', 
-              width: 3
-            },
-            name: 'Elipse',
-            showlegend: false
-          });
-          break;
-      }
-      
-      // Adicionar eixos
-      const eixo_x = {
-        x: [-8, 8], y: [0, 0],
-        mode: 'lines',
-        type: 'scatter',
-        line: { color: '#ff4444', width: 2 },
-        name: 'Eixo X (Abcissa)',
-        showlegend: false
-      };
-      
-      const eixo_y = {
-        x: [0, 0], y: [-8, 8],
-        mode: 'lines',
-        type: 'scatter',
-        line: { color: '#44ff44', width: 2 },
-        name: 'Eixo Y (Ordenada)',
-        showlegend: false
-      };
-      
-      elementos.push(eixo_x, eixo_y);
-      
-      // Adicionar elementos específicos de cada curva
-      switch(curvaAtual) {
-        case 'parabola':
-          elementos.push({
-            x: [0],
-            y: [a],
-            mode: 'markers',
-            type: 'scatter',
-            marker: { 
-              color: 'red', 
-              size: 12,
-              symbol: 'circle',
-              line: { color: 'white', width: 1 }
-            },
-            name: 'Foco'
-          });
-          
-          elementos.push({
-            x: [-8, 8],
-            y: [-a, -a],
-            mode: 'lines',
-            type: 'scatter',
-            line: { 
-              color: 'yellow', 
-              width: 3, 
-              dash: 'dash'
-            },
-            name: 'Diretriz'
-          });
-          break;
-          
-        case 'hiperbole':
-          const c_hiperbole = Math.sqrt(a*a + b*b);
-          
-          elementos.push({
-            x: [c_hiperbole, -c_hiperbole],
-            y: [0, 0],
-            mode: 'markers',
-            type: 'scatter',
-            marker: { 
-              color: 'red', 
-              size: 12,
-              symbol: 'circle',
-              line: { color: 'white', width: 1 }
-            },
-            name: 'Focos'
-          });
-          
-          elementos.push({
-            x: [0],
-            y: [0],
-            mode: 'markers',
-            type: 'scatter',
-            marker: { 
-              color: 'cyan', 
-              size: 10, 
-              symbol: 'diamond',
-              line: { color: 'white', width: 1 }
-            },
-            name: 'Centro'
-          });
-          break;
-          
-        case 'elipse':
-          const c_elipse = Math.sqrt(Math.abs(a*a - b*b));
-          
-          elementos.push({
-            x: [c_elipse, -c_elipse],
-            y: [0, 0],
-            mode: 'markers',
-            type: 'scatter',
-            marker: { 
-              color: 'red', 
-              size: 12,
-              symbol: 'circle',
-              line: { color: 'white', width: 1 }
-            },
-            name: 'Focos'
-          });
-          
-          elementos.push({
-            x: [0],
-            y: [0],
-            mode: 'markers',
-            type: 'scatter',
-            marker: { 
-              color: 'cyan', 
-              size: 10, 
-              symbol: 'diamond',
-              line: { color: 'white', width: 1 }
-            },
-            name: 'Centro'
-          });
-          break;
-      }
-      
-      const layout = {
-        xaxis: { 
-          title: 'X (Abcissa) ←→', 
-          gridcolor: '#444', 
-          gridwidth: 1,
-          range: [-8, 8],
-          zeroline: false,
-          color: '#ff4444',
-          titlefont: { color: '#ff4444', size: 14 }
-        },
-        yaxis: { 
-          title: 'Y (Ordenada) ↑↓', 
-          gridcolor: '#444', 
-          gridwidth: 1,
-          range: [-8, 8],
-          zeroline: false,
-          color: '#44ff44',
-          titlefont: { color: '#44ff44', size: 14 },
-          scaleanchor: "x",
-          scaleratio: 1
-        },
-        margin: { t: 40, l: 80, r: 40, b: 80 },
-        paper_bgcolor: '#000',
-        plot_bgcolor: '#000',
-        showlegend: true,
-        legend: {
-          bgcolor: 'rgba(0,0,0,0.8)',
-          font: { color: 'white' },
-          x: 0.02,
-          y: 0.98
-        }
-      };
-      
-      Plotly.newPlot('grafico', elementos, layout);
+    contexto.stroke();
+
+    // Draw foci if they exist
+    if (foco1) {
+        contexto.fillStyle = '#FF5252';
+        contexto.beginPath();
+        contexto.arc(cx + foco1.x * escala, cy - foco1.y * escala, 5, 0, 2 * Math.PI);
+        contexto.fill();
     }
-  </script>
+
+    if (foco2) {
+        contexto.fillStyle = '#FF5252';
+        contexto.beginPath();
+        contexto.arc(cx + foco2.x * escala, cy - foco2.y * escala, 5, 0, 2 * Math.PI);
+        contexto.fill();
+    }
+    
+    // Desenhar diretrizes se existirem
+    if (diretriz1) {
+        contexto.strokeStyle = '#64B5F6';
+        contexto.lineWidth = 1;
+        contexto.setLineDash([5, 5]);
+        
+        if (diretriz1.tipo === 'vertical') {
+            contexto.beginPath();
+            contexto.moveTo(cx + diretriz1.valor * escala, 0);
+            contexto.lineTo(cx + diretriz1.valor * escala, canvas.height);
+            contexto.stroke();
+            
+            if (diretriz2) {
+                contexto.beginPath();
+                contexto.moveTo(cx + diretriz2.valor * escala, 0);
+                contexto.lineTo(cx + diretriz2.valor * escala, canvas.height);
+                contexto.stroke();
+            }
+        } else {
+            contexto.beginPath();
+            contexto.moveTo(0, cy - diretriz1.valor * escala);
+            contexto.lineTo(canvas.width, cy - diretriz1.valor * escala);
+            contexto.stroke();
+            
+            if (diretriz2) {
+                contexto.beginPath();
+                contexto.moveTo(0, cy - diretriz2.valor * escala);
+                contexto.lineTo(canvas.width, cy - diretriz2.valor * escala);
+                contexto.stroke();
+            }
+        }
+        contexto.setLineDash([]);
+    }
+    
+    // Desenhar centro
+    contexto.fillStyle = '#64B5F6';
+    contexto.beginPath();
+    contexto.arc(cx + centro.x * escala, cy - centro.y * escala, 3, 0, 2 * Math.PI);
+    contexto.fill();
+    contexto.fillText('C', cx + centro.x * escala - 12, cy - centro.y * escala + 15);
+    
+    // Mostrar informação sobre rotação
+    if (B !== 0) {
+        contexto.fillStyle = '#FFD54F';
+        contexto.font = '12px Courier New';
+        contexto.fillText(`Ângulo de rotação: ${(rotationAngle * 180 / Math.PI).toFixed(1)}°`, cx - 80, cy - 100);
+        
+        // Desenhar eixos rotacionados
+        contexto.strokeStyle = '#FF5252';
+        contexto.setLineDash([5, 3]);
+        contexto.lineWidth = 1;
+        
+        const comprimento = 200;
+        
+        // Eixo x' rotacionado
+        contexto.beginPath();
+        contexto.moveTo(
+            cx + centro.x * escala - comprimento * Math.cos(rotationAngle), 
+            cy - centro.y * escala + comprimento * Math.sin(rotationAngle)
+        );
+        contexto.lineTo(
+            cx + centro.x * escala + comprimento * Math.cos(rotationAngle), 
+            cy - centro.y * escala - comprimento * Math.sin(rotationAngle)
+        );
+        contexto.stroke();
+        
+        // Eixo y' rotacionado
+        contexto.beginPath();
+        contexto.moveTo(
+            cx + centro.x * escala - comprimento * Math.sin(rotationAngle), 
+            cy - centro.y * escala - comprimento * Math.cos(rotationAngle)
+        );
+        contexto.lineTo(
+            cx + centro.x * escala + comprimento * Math.sin(rotationAngle), 
+            cy - centro.y * escala + comprimento * Math.cos(rotationAngle)
+        );
+        contexto.stroke();
+        
+        contexto.setLineDash([]);
+        
+        contexto.fillStyle = '#FF5252';
+        contexto.fillText('x\'', 
+            cx + centro.x * escala + comprimento * Math.cos(rotationAngle) + 5, 
+            cy - centro.y * escala - comprimento * Math.sin(rotationAngle) - 5
+        );
+        contexto.fillText('y\'', 
+            cx + centro.x * escala + comprimento * Math.sin(rotationAngle) + 5, 
+            cy - centro.y * escala + comprimento * Math.cos(rotationAngle) - 5
+        );
+    }
+}
+    </script>
 </body>
 </html>
